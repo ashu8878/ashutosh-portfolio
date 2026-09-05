@@ -1,9 +1,9 @@
 from flask import Flask, render_template, request, redirect, session
 from datetime import datetime
+from zoneinfo import ZoneInfo
 import os
 from dotenv import load_dotenv
 import psycopg2
-from psycopg2.extras import RealDictCursor
 
 load_dotenv()
 
@@ -16,7 +16,7 @@ app.secret_key = os.getenv("SECRET_KEY")
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 
-# PostgreSQL connection
+# PostgreSQL
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 
@@ -59,9 +59,10 @@ def contact():
     if not name or not email or not message:
         return "Please fill all fields."
 
-    date_time = datetime.now().strftime(
-        "%d-%m-%Y %I:%M %p"
-    )
+    # India Time (IST)
+    date_time = datetime.now(
+        ZoneInfo("Asia/Kolkata")
+    ).strftime("%d-%m-%Y %I:%M %p")
 
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -144,7 +145,6 @@ def admin():
     cursor.execute(
         "SELECT COUNT(*) FROM messages"
     )
-
     total_messages = cursor.fetchone()[0]
 
     cursor.execute("""
@@ -152,7 +152,6 @@ def admin():
         FROM messages
         WHERE status = 'Unread'
     """)
-
     unread_messages = cursor.fetchone()[0]
 
     cursor.execute("""
@@ -160,7 +159,6 @@ def admin():
         FROM messages
         WHERE status = 'Read'
     """)
-
     read_messages = cursor.fetchone()[0]
 
     cursor.close()
