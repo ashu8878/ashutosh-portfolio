@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, redirect, session
-import sqlite3
 from datetime import datetime
 import os
 from dotenv import load_dotenv
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
 load_dotenv()
 
@@ -15,14 +16,21 @@ app.secret_key = os.getenv("SECRET_KEY")
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME")
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 
+# PostgreSQL connection
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+
+def get_db_connection():
+    return psycopg2.connect(DATABASE_URL)
+
 
 def init_db():
-    conn = sqlite3.connect("messages.db")
+    conn = get_db_connection()
     cursor = conn.cursor()
 
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS messages (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            id SERIAL PRIMARY KEY,
             name TEXT NOT NULL,
             email TEXT NOT NULL,
             message TEXT NOT NULL,
@@ -31,48 +39,8 @@ def init_db():
         )
     """)
 
-    columns = [
-        column[1]
-        for column in cursor.execute(
-            "PRAGMA table_info(messages)"
-        ).fetchall()
-    ]
-
-    if "date_time" not in columns:
-        cursor.execute(
-            "ALTER TABLE messages ADD COLUMN date_time TEXT"
-        )
-
-        cursor.execute(
-            """
-            UPDATE messages
-            SET date_time = ?
-            WHERE date_time IS NULL
-            """,
-            (
-                datetime.now().strftime(
-                    "%d-%m-%Y %I:%M %p"
-                ),
-            )
-        )
-
-    if "status" not in columns:
-        cursor.execute(
-            """
-            ALTER TABLE messages
-            ADD COLUMN status TEXT DEFAULT 'Unread'
-            """
-        )
-
-        cursor.execute(
-            """
-            UPDATE messages
-            SET status = 'Unread'
-            WHERE status IS NULL
-            """
-        )
-
     conn.commit()
+    cursor.close()
     conn.close()
 
 
@@ -95,14 +63,14 @@ def contact():
         "%d-%m-%Y %I:%M %p"
     )
 
-    conn = sqlite3.connect("messages.db")
+    conn = get_db_connection()
     cursor = conn.cursor()
 
     cursor.execute(
         """
         INSERT INTO messages
         (name, email, message, date_time, status)
-        VALUES (?, ?, ?, ?, ?)
+        VALUES (%s, %s, %s, %s, %s)
         """,
         (
             name,
@@ -114,6 +82,7 @@ def contact():
     )
 
     conn.commit()
+    cursor.close()
     conn.close()
 
     return "Message received and saved successfully!"
@@ -155,11 +124,10 @@ def admin():
     if not session.get("admin_logged_in"):
         return redirect("/login")
 
-    conn = sqlite3.connect("messages.db")
+    conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT
             id,
             name,
@@ -169,34 +137,33 @@ def admin():
             status
         FROM messages
         ORDER BY id DESC
-        """
-    )
+    """)
 
     messages = cursor.fetchall()
 
     cursor.execute(
         "SELECT COUNT(*) FROM messages"
     )
+
     total_messages = cursor.fetchone()[0]
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT COUNT(*)
         FROM messages
         WHERE status = 'Unread'
-        """
-    )
+    """)
+
     unread_messages = cursor.fetchone()[0]
 
-    cursor.execute(
-        """
+    cursor.execute("""
         SELECT COUNT(*)
         FROM messages
         WHERE status = 'Read'
-        """
-    )
+    """)
+
     read_messages = cursor.fetchone()[0]
 
+    cursor.close()
     conn.close()
 
     return render_template(
@@ -217,19 +184,20 @@ def mark_read(message_id):
     if not session.get("admin_logged_in"):
         return redirect("/login")
 
-    conn = sqlite3.connect("messages.db")
+    conn = get_db_connection()
     cursor = conn.cursor()
 
     cursor.execute(
         """
         UPDATE messages
         SET status = 'Read'
-        WHERE id = ?
+        WHERE id = %s
         """,
         (message_id,)
     )
 
     conn.commit()
+    cursor.close()
     conn.close()
 
     return redirect("/admin")
@@ -244,19 +212,20 @@ def mark_unread(message_id):
     if not session.get("admin_logged_in"):
         return redirect("/login")
 
-    conn = sqlite3.connect("messages.db")
+    conn = get_db_connection()
     cursor = conn.cursor()
 
     cursor.execute(
         """
         UPDATE messages
         SET status = 'Unread'
-        WHERE id = ?
+        WHERE id = %s
         """,
         (message_id,)
     )
 
     conn.commit()
+    cursor.close()
     conn.close()
 
     return redirect("/admin")
@@ -271,18 +240,19 @@ def delete_message(message_id):
     if not session.get("admin_logged_in"):
         return redirect("/login")
 
-    conn = sqlite3.connect("messages.db")
+    conn = get_db_connection()
     cursor = conn.cursor()
 
     cursor.execute(
         """
         DELETE FROM messages
-        WHERE id = ?
+        WHERE id = %s
         """,
         (message_id,)
     )
 
     conn.commit()
+    cursor.close()
     conn.close()
 
     return redirect("/admin")
@@ -296,7 +266,7 @@ def logout():
     return redirect("/login")
 
 
-# Initialize database
+# Initialize PostgreSQL database
 init_db()
 
 
