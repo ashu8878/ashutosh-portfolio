@@ -4,6 +4,7 @@ from zoneinfo import ZoneInfo
 import os
 from dotenv import load_dotenv
 import psycopg2
+from werkzeug.security import check_password_hash
 
 load_dotenv()
 
@@ -14,7 +15,7 @@ app.secret_key = os.getenv("SECRET_KEY")
 
 # Admin credentials
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME")
-ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
+ADMIN_PASSWORD_HASH = os.getenv("ADMIN_PASSWORD_HASH")
 
 # PostgreSQL
 DATABASE_URL = os.getenv("DATABASE_URL")
@@ -59,7 +60,6 @@ def contact():
     if not name or not email or not message:
         return "Please fill all fields."
 
-    # India Time (IST)
     date_time = datetime.now(
         ZoneInfo("Asia/Kolkata")
     ).strftime("%d-%m-%Y %I:%M %p")
@@ -107,9 +107,12 @@ def login():
         if (
             app.secret_key
             and ADMIN_USERNAME
-            and ADMIN_PASSWORD
+            and ADMIN_PASSWORD_HASH
             and username == ADMIN_USERNAME
-            and password == ADMIN_PASSWORD
+            and check_password_hash(
+                ADMIN_PASSWORD_HASH,
+                password
+            )
         ):
             session["admin_logged_in"] = True
             return redirect("/admin")
