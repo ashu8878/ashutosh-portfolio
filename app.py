@@ -1,18 +1,22 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
 from datetime import datetime
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 
-app.secret_key = "my_secret_key_123"
+# Secret key
+app.secret_key = os.getenv("SECRET_KEY")
 
+# Admin credentials
+ADMIN_USERNAME = os.getenv("ADMIN_USERNAME")
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD")
 
-# =========================
-# DATABASE
-# =========================
 
 def init_db():
-
     conn = sqlite3.connect("messages.db")
     cursor = conn.cursor()
 
@@ -27,10 +31,12 @@ def init_db():
         )
     """)
 
-    # Old database compatibility
-    columns = [column[1] for column in cursor.execute(
-        "PRAGMA table_info(messages)"
-    ).fetchall()]
+    columns = [
+        column[1]
+        for column in cursor.execute(
+            "PRAGMA table_info(messages)"
+        ).fetchall()
+    ]
 
     if "date_time" not in columns:
         cursor.execute(
@@ -38,36 +44,42 @@ def init_db():
         )
 
         cursor.execute(
-            "UPDATE messages SET date_time = ? WHERE date_time IS NULL",
-            (datetime.now().strftime("%d-%m-%Y %I:%M %p"),)
+            """
+            UPDATE messages
+            SET date_time = ?
+            WHERE date_time IS NULL
+            """,
+            (
+                datetime.now().strftime(
+                    "%d-%m-%Y %I:%M %p"
+                ),
+            )
         )
 
     if "status" not in columns:
         cursor.execute(
-            "ALTER TABLE messages ADD COLUMN status TEXT DEFAULT 'Unread'"
+            """
+            ALTER TABLE messages
+            ADD COLUMN status TEXT DEFAULT 'Unread'
+            """
         )
 
         cursor.execute(
-            "UPDATE messages SET status = 'Unread' WHERE status IS NULL"
+            """
+            UPDATE messages
+            SET status = 'Unread'
+            WHERE status IS NULL
+            """
         )
 
     conn.commit()
     conn.close()
 
 
-# =========================
-# HOME
-# =========================
-
 @app.route("/")
 def home():
-
     return render_template("index.html")
 
-
-# =========================
-# CONTACT FORM
-# =========================
 
 @app.route("/contact", methods=["POST"])
 def contact():
@@ -86,17 +98,20 @@ def contact():
     conn = sqlite3.connect("messages.db")
     cursor = conn.cursor()
 
-    cursor.execute("""
+    cursor.execute(
+        """
         INSERT INTO messages
         (name, email, message, date_time, status)
         VALUES (?, ?, ?, ?, ?)
-    """, (
-        name,
-        email,
-        message,
-        date_time,
-        "Unread"
-    ))
+        """,
+        (
+            name,
+            email,
+            message,
+            date_time,
+            "Unread"
+        )
+    )
 
     conn.commit()
     conn.close()
@@ -104,32 +119,35 @@ def contact():
     return "Message received and saved successfully!"
 
 
-# =========================
-# LOGIN
-# =========================
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
 
     if request.method == "POST":
 
-        username = request.form.get("username", "").strip()
-        password = request.form.get("password", "")
+        username = request.form.get(
+            "username",
+            ""
+        ).strip()
 
-        if username == "admin" and password == "1234":
+        password = request.form.get(
+            "password",
+            ""
+        )
 
+        if (
+            app.secret_key
+            and ADMIN_USERNAME
+            and ADMIN_PASSWORD
+            and username == ADMIN_USERNAME
+            and password == ADMIN_PASSWORD
+        ):
             session["admin_logged_in"] = True
-
             return redirect("/admin")
 
         return "Invalid username or password!"
 
     return render_template("login.html")
 
-
-# =========================
-# ADMIN DASHBOARD
-# =========================
 
 @app.route("/admin")
 def admin():
@@ -140,35 +158,43 @@ def admin():
     conn = sqlite3.connect("messages.db")
     cursor = conn.cursor()
 
-    cursor.execute("""
-        SELECT id, name, email, message, date_time, status
+    cursor.execute(
+        """
+        SELECT
+            id,
+            name,
+            email,
+            message,
+            date_time,
+            status
         FROM messages
         ORDER BY id DESC
-    """)
+        """
+    )
 
     messages = cursor.fetchall()
 
-    cursor.execute("""
-        SELECT COUNT(*)
-        FROM messages
-    """)
-
+    cursor.execute(
+        "SELECT COUNT(*) FROM messages"
+    )
     total_messages = cursor.fetchone()[0]
 
-    cursor.execute("""
+    cursor.execute(
+        """
         SELECT COUNT(*)
         FROM messages
         WHERE status = 'Unread'
-    """)
-
+        """
+    )
     unread_messages = cursor.fetchone()[0]
 
-    cursor.execute("""
+    cursor.execute(
+        """
         SELECT COUNT(*)
         FROM messages
         WHERE status = 'Read'
-    """)
-
+        """
+    )
     read_messages = cursor.fetchone()[0]
 
     conn.close()
@@ -182,11 +208,10 @@ def admin():
     )
 
 
-# =========================
-# MARK AS READ
-# =========================
-
-@app.route("/mark-read/<int:message_id>", methods=["POST"])
+@app.route(
+    "/mark-read/<int:message_id>",
+    methods=["POST"]
+)
 def mark_read(message_id):
 
     if not session.get("admin_logged_in"):
@@ -195,11 +220,14 @@ def mark_read(message_id):
     conn = sqlite3.connect("messages.db")
     cursor = conn.cursor()
 
-    cursor.execute("""
+    cursor.execute(
+        """
         UPDATE messages
         SET status = 'Read'
         WHERE id = ?
-    """, (message_id,))
+        """,
+        (message_id,)
+    )
 
     conn.commit()
     conn.close()
@@ -207,11 +235,10 @@ def mark_read(message_id):
     return redirect("/admin")
 
 
-# =========================
-# MARK AS UNREAD
-# =========================
-
-@app.route("/mark-unread/<int:message_id>", methods=["POST"])
+@app.route(
+    "/mark-unread/<int:message_id>",
+    methods=["POST"]
+)
 def mark_unread(message_id):
 
     if not session.get("admin_logged_in"):
@@ -220,11 +247,14 @@ def mark_unread(message_id):
     conn = sqlite3.connect("messages.db")
     cursor = conn.cursor()
 
-    cursor.execute("""
+    cursor.execute(
+        """
         UPDATE messages
         SET status = 'Unread'
         WHERE id = ?
-    """, (message_id,))
+        """,
+        (message_id,)
+    )
 
     conn.commit()
     conn.close()
@@ -232,11 +262,10 @@ def mark_unread(message_id):
     return redirect("/admin")
 
 
-# =========================
-# DELETE MESSAGE
-# =========================
-
-@app.route("/delete/<int:message_id>", methods=["POST"])
+@app.route(
+    "/delete/<int:message_id>",
+    methods=["POST"]
+)
 def delete_message(message_id):
 
     if not session.get("admin_logged_in"):
@@ -245,20 +274,19 @@ def delete_message(message_id):
     conn = sqlite3.connect("messages.db")
     cursor = conn.cursor()
 
-    cursor.execute("""
+    cursor.execute(
+        """
         DELETE FROM messages
         WHERE id = ?
-    """, (message_id,))
+        """,
+        (message_id,)
+    )
 
     conn.commit()
     conn.close()
 
     return redirect("/admin")
 
-
-# =========================
-# LOGOUT
-# =========================
 
 @app.route("/logout")
 def logout():
@@ -268,13 +296,9 @@ def logout():
     return redirect("/login")
 
 
-# =========================
-# START SERVER
-# =========================
-
+# Initialize database
 init_db()
 
 
 if __name__ == "__main__":
-
     app.run(debug=True)
