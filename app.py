@@ -30,7 +30,8 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 
 app.config.update(
     SESSION_COOKIE_HTTPONLY=True,
-    SESSION_COOKIE_SAMESITE="Lax"
+    SESSION_COOKIE_SAMESITE="Lax",
+    SESSION_COOKIE_SECURE=os.getenv("RENDER") == "true"
 )
 
 
