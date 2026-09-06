@@ -86,8 +86,7 @@ csrf = CSRFProtect(app)
 limiter = Limiter(
     key_func=get_remote_address,
     app=app,
-    default_limits=[],
-    storage_uri=os.getenv("REDIS_URL", "memory://")
+    default_limits=[]
 )
 
 
