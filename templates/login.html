@@ -85,6 +85,13 @@
 
         <form method="POST" action="/login">
 
+            <!-- CSRF Protection -->
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+            >
+
             <label for="username">Username</label>
 
             <input

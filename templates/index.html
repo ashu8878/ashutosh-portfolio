@@ -2018,6 +2018,13 @@ footer{
 
             <form id="contactForm">
 
+                <input
+                    type="hidden"
+                    id="csrfToken"
+                    name="csrf_token"
+                    value="{{ csrf_token() }}"
+                >
+
                 <div class="form-group">
 
                     <label for="name">
@@ -2448,6 +2455,10 @@ document
     formData.append("name", name);
     formData.append("email", email);
     formData.append("message", message);
+    formData.append(
+        "csrf_token",
+        document.getElementById("csrfToken").value
+    );
 
     try {
 

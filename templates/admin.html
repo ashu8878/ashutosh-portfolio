@@ -34,10 +34,11 @@
         .logout-btn {
             background: #ef4444;
             color: white;
-            text-decoration: none;
+            border: none;
             padding: 10px 18px;
             border-radius: 8px;
             font-weight: bold;
+            cursor: pointer;
         }
 
         .stats {
@@ -174,9 +175,23 @@
 
         <h1>Admin Dashboard</h1>
 
-        <a href="/logout" class="logout-btn">
-            Logout
-        </a>
+        <!-- SECURE LOGOUT -->
+        <form method="POST" action="/logout">
+
+            <input
+                type="hidden"
+                name="csrf_token"
+                value="{{ csrf_token() }}"
+            >
+
+            <button
+                type="submit"
+                class="logout-btn"
+            >
+                Logout
+            </button>
+
+        </form>
 
     </div>
 
@@ -269,12 +284,20 @@
                                         method="POST"
                                         action="/mark-read/{{ message[0] }}"
                                     >
+
+                                        <input
+                                            type="hidden"
+                                            name="csrf_token"
+                                            value="{{ csrf_token() }}"
+                                        >
+
                                         <button
                                             type="submit"
                                             class="read-btn"
                                         >
                                             Mark Read
                                         </button>
+
                                     </form>
 
                                 {% else %}
@@ -283,12 +306,20 @@
                                         method="POST"
                                         action="/mark-unread/{{ message[0] }}"
                                     >
+
+                                        <input
+                                            type="hidden"
+                                            name="csrf_token"
+                                            value="{{ csrf_token() }}"
+                                        >
+
                                         <button
                                             type="submit"
                                             class="unread-btn"
                                         >
                                             Mark Unread
                                         </button>
+
                                     </form>
 
                                 {% endif %}
@@ -299,12 +330,20 @@
                                     action="/delete/{{ message[0] }}"
                                     onsubmit="return confirm('Delete this message?');"
                                 >
+
+                                    <input
+                                        type="hidden"
+                                        name="csrf_token"
+                                        value="{{ csrf_token() }}"
+                                    >
+
                                     <button
                                         type="submit"
                                         class="delete-btn"
                                     >
                                         Delete
                                     </button>
+
                                 </form>
 
                             </div>

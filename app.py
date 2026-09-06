@@ -2,31 +2,62 @@ from flask import Flask, render_template, request, redirect, session
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import os
+
 from dotenv import load_dotenv
 import psycopg2
+
 from werkzeug.security import check_password_hash
+from flask_wtf.csrf import CSRFProtect
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
+
 
 load_dotenv()
 
+
 app = Flask(__name__)
 
-# Secret key
 app.secret_key = os.getenv("SECRET_KEY")
 
-# Admin credentials
 ADMIN_USERNAME = os.getenv("ADMIN_USERNAME")
 ADMIN_PASSWORD_HASH = os.getenv("ADMIN_PASSWORD_HASH")
-
-# PostgreSQL
 DATABASE_URL = os.getenv("DATABASE_URL")
 
+
+# =====================================================
+# SECURITY SETTINGS
+# =====================================================
+
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE="Lax"
+)
+
+
+# CSRF Protection
+csrf = CSRFProtect(app)
+
+
+# Login rate limiting
+limiter = Limiter(
+    key_func=get_remote_address,
+    app=app,
+    default_limits=[]
+)
+
+
+# =====================================================
+# DATABASE
+# =====================================================
 
 def get_db_connection():
     return psycopg2.connect(DATABASE_URL)
 
 
 def init_db():
+
     conn = get_db_connection()
+
     cursor = conn.cursor()
 
     cursor.execute("""
@@ -41,31 +72,49 @@ def init_db():
     """)
 
     conn.commit()
+
     cursor.close()
     conn.close()
 
 
+# =====================================================
+# HOME
+# =====================================================
+
 @app.route("/")
 def home():
+
     return render_template("index.html")
 
+
+# =====================================================
+# CONTACT
+# =====================================================
 
 @app.route("/contact", methods=["POST"])
 def contact():
 
     name = request.form.get("name", "").strip()
+
     email = request.form.get("email", "").strip()
+
     message = request.form.get("message", "").strip()
 
+
     if not name or not email or not message:
+
         return "Please fill all fields."
+
 
     date_time = datetime.now(
         ZoneInfo("Asia/Kolkata")
     ).strftime("%d-%m-%Y %I:%M %p")
 
+
     conn = get_db_connection()
+
     cursor = conn.cursor()
+
 
     cursor.execute(
         """
@@ -82,14 +131,25 @@ def contact():
         )
     )
 
+
     conn.commit()
+
     cursor.close()
     conn.close()
+
 
     return "Message received and saved successfully!"
 
 
+# =====================================================
+# LOGIN
+# =====================================================
+
 @app.route("/login", methods=["GET", "POST"])
+@limiter.limit(
+    "5 per minute",
+    methods=["POST"]
+)
 def login():
 
     if request.method == "POST":
@@ -104,6 +164,7 @@ def login():
             ""
         )
 
+
         if (
             app.secret_key
             and ADMIN_USERNAME
@@ -114,22 +175,34 @@ def login():
                 password
             )
         ):
+
             session["admin_logged_in"] = True
+
             return redirect("/admin")
+
 
         return "Invalid username or password!"
 
+
     return render_template("login.html")
 
+
+# =====================================================
+# ADMIN
+# =====================================================
 
 @app.route("/admin")
 def admin():
 
     if not session.get("admin_logged_in"):
+
         return redirect("/login")
 
+
     conn = get_db_connection()
+
     cursor = conn.cursor()
+
 
     cursor.execute("""
         SELECT
@@ -143,29 +216,39 @@ def admin():
         ORDER BY id DESC
     """)
 
+
     messages = cursor.fetchall()
+
 
     cursor.execute(
         "SELECT COUNT(*) FROM messages"
     )
+
     total_messages = cursor.fetchone()[0]
+
 
     cursor.execute("""
         SELECT COUNT(*)
         FROM messages
         WHERE status = 'Unread'
     """)
+
     unread_messages = cursor.fetchone()[0]
+
 
     cursor.execute("""
         SELECT COUNT(*)
         FROM messages
         WHERE status = 'Read'
     """)
+
     read_messages = cursor.fetchone()[0]
 
+
     cursor.close()
+
     conn.close()
+
 
     return render_template(
         "admin.html",
@@ -176,6 +259,10 @@ def admin():
     )
 
 
+# =====================================================
+# MARK READ
+# =====================================================
+
 @app.route(
     "/mark-read/<int:message_id>",
     methods=["POST"]
@@ -183,10 +270,14 @@ def admin():
 def mark_read(message_id):
 
     if not session.get("admin_logged_in"):
+
         return redirect("/login")
 
+
     conn = get_db_connection()
+
     cursor = conn.cursor()
+
 
     cursor.execute(
         """
@@ -197,12 +288,19 @@ def mark_read(message_id):
         (message_id,)
     )
 
+
     conn.commit()
+
     cursor.close()
     conn.close()
 
+
     return redirect("/admin")
 
+
+# =====================================================
+# MARK UNREAD
+# =====================================================
 
 @app.route(
     "/mark-unread/<int:message_id>",
@@ -211,10 +309,14 @@ def mark_read(message_id):
 def mark_unread(message_id):
 
     if not session.get("admin_logged_in"):
+
         return redirect("/login")
 
+
     conn = get_db_connection()
+
     cursor = conn.cursor()
+
 
     cursor.execute(
         """
@@ -225,12 +327,19 @@ def mark_unread(message_id):
         (message_id,)
     )
 
+
     conn.commit()
+
     cursor.close()
     conn.close()
 
+
     return redirect("/admin")
 
+
+# =====================================================
+# DELETE MESSAGE
+# =====================================================
 
 @app.route(
     "/delete/<int:message_id>",
@@ -239,10 +348,14 @@ def mark_unread(message_id):
 def delete_message(message_id):
 
     if not session.get("admin_logged_in"):
+
         return redirect("/login")
 
+
     conn = get_db_connection()
+
     cursor = conn.cursor()
+
 
     cursor.execute(
         """
@@ -252,14 +365,24 @@ def delete_message(message_id):
         (message_id,)
     )
 
+
     conn.commit()
+
     cursor.close()
     conn.close()
+
 
     return redirect("/admin")
 
 
-@app.route("/logout")
+# =====================================================
+# LOGOUT
+# =====================================================
+
+@app.route(
+    "/logout",
+    methods=["POST"]
+)
 def logout():
 
     session.clear()
@@ -267,9 +390,17 @@ def logout():
     return redirect("/login")
 
 
-# Initialize PostgreSQL database
+# =====================================================
+# DATABASE INITIALIZATION
+# =====================================================
+
 init_db()
 
 
+# =====================================================
+# RUN
+# =====================================================
+
 if __name__ == "__main__":
+
     app.run(debug=True)
