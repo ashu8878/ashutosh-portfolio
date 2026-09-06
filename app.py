@@ -167,6 +167,184 @@ def contact():
     # NAME VALIDATION
     # -------------------------------------------------
 
+    if not re.fullmatch(r"[A-Za-zÀ-ÿ .'-]+", name):
+        return "Please enter a valid name."
+
+    # -------------------------------------------------
+    # EMAIL VALIDATION
+    # -------------------------------------------------
+
+    if not re.fullmatch(
+        r"^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@"
+        r"[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$",
+        email
+    ):
+        return "Please enter a valid email address."
+
+    # -------------------------------------------------
+    # MESSAGE VALIDATION
+    # -------------------------------------------------
+
+    if len(message) < 2:
+        return "Message is too short."
+
+    # -------------------------------------------------
+    # DATE & TIME
+    # -------------------------------------------------
+
+    date_time = datetime.now(
+        ZoneInfo("Asia/Kolkata")
+    ).strftime("%d-%m-%Y %I:%M %p")
+
+    # -------------------------------------------------
+    # SAVE MESSAGE TO DATABASE
+    # -------------------------------------------------
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        """
+        INSERT INTO messages
+        (name, email, message, date_time, status)
+        VALUES (%s, %s, %s, %s, %s)
+        """,
+        (
+            name,
+            email,
+            message,
+            date_time,
+            "Unread"
+        )
+    )
+
+    conn.commit()
+
+    cursor.close()
+    conn.close()
+
+    # -------------------------------------------------
+    # BREVO HTTP API EMAIL NOTIFICATION
+    # -------------------------------------------------
+
+    try:
+        import threading
+        import json
+        import urllib.request
+        import urllib.error
+
+        def send_brevo_email():
+
+            try:
+                brevo_api_key = os.getenv("BREVO_API_KEY")
+
+                if not brevo_api_key:
+                    print("Brevo email failed: BREVO_API_KEY is missing.")
+                    return
+
+                email_data = {
+                    "sender": {
+                        "name": "Ashutosh Portfolio",
+                        "email": "ashutosh.codes.in@gmail.com"
+                    },
+                    "to": [
+                        {
+                            "email": "ashutosh.codes.in@gmail.com",
+                            "name": "Ashutosh"
+                        }
+                    ],
+                    "subject": "New Portfolio Contact Message",
+                    "textContent": f"""You received a new message through your portfolio website.
+
+Name: {name}
+Email: {email}
+
+Message:
+{message}
+
+Date & Time:
+{date_time}
+"""
+                }
+
+                request_data = json.dumps(
+                    email_data
+                ).encode("utf-8")
+
+                request = urllib.request.Request(
+                    "https://api.brevo.com/v3/smtp/email",
+                    data=request_data,
+                    headers={
+                        "accept": "application/json",
+                        "api-key": brevo_api_key,
+                        "content-type": "application/json"
+                    },
+                    method="POST"
+                )
+
+                with urllib.request.urlopen(
+                    request,
+                    timeout=10
+                ) as response:
+
+                    response_body = response.read().decode(
+                        "utf-8"
+                    )
+
+                    print(
+                        "Brevo email sent successfully:",
+                        response_body
+                    )
+
+            except urllib.error.HTTPError as email_error:
+
+                error_body = email_error.read().decode(
+                    "utf-8",
+                    errors="replace"
+                )
+
+                print(
+                    "Brevo email failed:",
+                    email_error.code,
+                    error_body
+                )
+
+            except Exception as email_error:
+
+                print(
+                    "Brevo email failed:",
+                    email_error
+                )
+
+        threading.Thread(
+            target=send_brevo_email,
+            daemon=True
+        ).start()
+
+    except Exception as thread_error:
+
+        print(
+            "Brevo email thread failed:",
+            thread_error
+        )
+
+    # -------------------------------------------------
+    # SUCCESS RESPONSE
+    # -------------------------------------------------
+
+    return "Message received and saved successfully!"
+
+    # -------------------------------------------------
+    # REQUIRED FIELDS
+    # -------------------------------------------------
+
+    if not name or not email or not message:
+        return "Please fill all fields."
+
+    # -------------------------------------------------
+    # NAME VALIDATION
+    # -------------------------------------------------
+
     if not re.fullmatch(
         r"[A-Za-zÀ-ÿ .'-]+",
         name
