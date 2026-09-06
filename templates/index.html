@@ -1346,7 +1346,7 @@ footer{
 
             <a
                 class="btn"
-                href="/static/resume.pdf"
+                href="/static/CV.pdf"
                 target="_blank"
                 rel="noopener noreferrer">
                 Download CV
@@ -2016,7 +2016,7 @@ footer{
             </h3>
 
 
-            <form id="contactForm">
+            <form id="contactForm" method="POST" action="/contact">
 
                 <input
                     type="hidden"
@@ -2033,8 +2033,10 @@ footer{
 
                     <input
                         id="name"
+                        name="name"
                         type="text"
                         placeholder="Enter your name"
+                        maxlength="100"
                         required>
 
                 </div>
@@ -2048,8 +2050,10 @@ footer{
 
                     <input
                         id="senderEmail"
+                        name="email"
                         type="email"
                         placeholder="Enter your email"
+                        maxlength="254"
                         required>
 
                 </div>
@@ -2063,7 +2067,9 @@ footer{
 
                     <textarea
                         id="message"
+                        name="message"
                         placeholder="Write your message..."
+                        maxlength="5000"
                         required></textarea>
 
                 </div>
@@ -2435,46 +2441,34 @@ topBtn.addEventListener("click",()=>{
 });
 
 
+/* =====================================================
+   CONTACT FORM
+===================================================== */
+
 document
 .getElementById("contactForm")
 .addEventListener("submit", async (e) => {
 
     e.preventDefault();
 
-    const name =
-        document.getElementById("name").value.trim();
-
-    const email =
-        document.getElementById("senderEmail").value.trim();
-
-    const message =
-        document.getElementById("message").value.trim();
-
-    const formData = new URLSearchParams();
-
-    formData.append("name", name);
-    formData.append("email", email);
-    formData.append("message", message);
-    formData.append(
-        "csrf_token",
-        document.getElementById("csrfToken").value
-    );
+    const form = e.target;
+    const formData = new FormData(form);
 
     try {
 
         const response = await fetch("/contact", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: formData
+            body: new URLSearchParams(formData)
         });
 
         const result = await response.text();
 
-        alert(result);
-
-        document.getElementById("contactForm").reset();
+        if (response.ok) {
+            alert(result);
+            form.reset();
+        } else {
+            alert("Error: " + result);
+        }
 
     } catch (error) {
 

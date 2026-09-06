@@ -2,6 +2,9 @@ from flask import Flask, render_template, request, redirect, session
 from datetime import datetime
 from zoneinfo import ZoneInfo
 import os
+import re
+import smtplib
+from email.message import EmailMessage
 
 from dotenv import load_dotenv
 import psycopg2
@@ -46,7 +49,9 @@ def add_security_headers(response):
 
     response.headers["X-Frame-Options"] = "SAMEORIGIN"
 
-    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    response.headers["Referrer-Policy"] = (
+        "strict-origin-when-cross-origin"
+    )
 
     response.headers["Permissions-Policy"] = (
         "camera=(), microphone=(), geolocation=()"
@@ -81,7 +86,8 @@ csrf = CSRFProtect(app)
 limiter = Limiter(
     key_func=get_remote_address,
     app=app,
-    default_limits=[]
+    default_limits=[],
+    storage_uri=os.getenv("REDIS_URL", "memory://")
 )
 
 
@@ -141,15 +147,80 @@ def contact():
     message = request.form.get("message", "").strip()
 
 
+    # -------------------------------------------------
+    # INPUT LENGTH LIMITS
+    # -------------------------------------------------
+
+    if len(name) > 100:
+
+        return "Name is too long."
+
+
+    if len(email) > 254:
+
+        return "Email is too long."
+
+
+    if len(message) > 5000:
+
+        return "Message is too long."
+
+
+    # -------------------------------------------------
+    # REQUIRED FIELDS
+    # -------------------------------------------------
+
     if not name or not email or not message:
 
         return "Please fill all fields."
 
 
+    # -------------------------------------------------
+    # NAME VALIDATION
+    # -------------------------------------------------
+
+    if not re.fullmatch(
+        r"[A-Za-zÀ-ÿ .'-]+",
+        name
+    ):
+
+        return "Please enter a valid name."
+
+
+    # -------------------------------------------------
+    # EMAIL VALIDATION
+    # -------------------------------------------------
+
+    if not re.fullmatch(
+        r"^[A-Za-z0-9.!#$%&'*+/=?^_`{|}~-]+@"
+        r"[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$",
+        email
+    ):
+
+        return "Please enter a valid email address."
+
+
+    # -------------------------------------------------
+    # MESSAGE VALIDATION
+    # -------------------------------------------------
+
+    if len(message) < 2:
+
+        return "Message is too short."
+
+
+    # -------------------------------------------------
+    # DATE & TIME
+    # -------------------------------------------------
+
     date_time = datetime.now(
         ZoneInfo("Asia/Kolkata")
     ).strftime("%d-%m-%Y %I:%M %p")
 
+
+    # -------------------------------------------------
+    # DATABASE INSERT
+    # -------------------------------------------------
 
     conn = get_db_connection()
 
@@ -177,6 +248,45 @@ def contact():
     cursor.close()
     conn.close()
 
+    # -------------------------------------------------
+    # EMAIL NOTIFICATION
+    # -------------------------------------------------
+
+    try:
+        mail_server = os.getenv("MAIL_SERVER")
+        mail_port = int(os.getenv("MAIL_PORT", "587"))
+        mail_username = os.getenv("MAIL_USERNAME")
+        mail_password = os.getenv("MAIL_PASSWORD")
+        mail_to = os.getenv("MAIL_TO", "ashutosh.code.in@gmail.com")
+
+        if all([mail_server, mail_username, mail_password, mail_to]):
+
+            email_msg = EmailMessage()
+
+            email_msg["Subject"] = "New Portfolio Contact Message"
+            email_msg["From"] = mail_username
+            email_msg["To"] = mail_to
+
+            email_msg.set_content(
+                f"""You received a new message through your portfolio website.
+
+Name: {name}
+Email: {email}
+
+Message:
+{message}
+
+Date & Time: {date_time}
+"""
+            )
+
+            with smtplib.SMTP(mail_server, mail_port) as smtp:
+                smtp.starttls()
+                smtp.login(mail_username, mail_password)
+                smtp.send_message(email_msg)
+
+    except Exception as email_error:
+        print("Email notification failed:", email_error)
 
     return "Message received and saved successfully!"
 
