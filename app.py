@@ -140,39 +140,28 @@ def home():
 def contact():
 
     name = request.form.get("name", "").strip()
-
     email = request.form.get("email", "").strip()
-
     message = request.form.get("message", "").strip()
-
 
     # -------------------------------------------------
     # INPUT LENGTH LIMITS
     # -------------------------------------------------
 
     if len(name) > 100:
-
         return "Name is too long."
 
-
     if len(email) > 254:
-
         return "Email is too long."
 
-
     if len(message) > 5000:
-
         return "Message is too long."
-
 
     # -------------------------------------------------
     # REQUIRED FIELDS
     # -------------------------------------------------
 
     if not name or not email or not message:
-
         return "Please fill all fields."
-
 
     # -------------------------------------------------
     # NAME VALIDATION
@@ -182,9 +171,7 @@ def contact():
         r"[A-Za-zÀ-ÿ .'-]+",
         name
     ):
-
         return "Please enter a valid name."
-
 
     # -------------------------------------------------
     # EMAIL VALIDATION
@@ -195,18 +182,14 @@ def contact():
         r"[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$",
         email
     ):
-
         return "Please enter a valid email address."
-
 
     # -------------------------------------------------
     # MESSAGE VALIDATION
     # -------------------------------------------------
 
     if len(message) < 2:
-
         return "Message is too short."
-
 
     # -------------------------------------------------
     # DATE & TIME
@@ -216,15 +199,12 @@ def contact():
         ZoneInfo("Asia/Kolkata")
     ).strftime("%d-%m-%Y %I:%M %p")
 
-
     # -------------------------------------------------
     # DATABASE INSERT
     # -------------------------------------------------
 
     conn = get_db_connection()
-
     cursor = conn.cursor()
-
 
     cursor.execute(
         """
@@ -241,7 +221,6 @@ def contact():
         )
     )
 
-
     conn.commit()
 
     cursor.close()
@@ -252,22 +231,44 @@ def contact():
     # -------------------------------------------------
 
     try:
-        mail_server = os.getenv("MAIL_SERVER")
-        mail_port = int(os.getenv("MAIL_PORT", "587"))
-        mail_username = os.getenv("MAIL_USERNAME")
-        mail_password = os.getenv("MAIL_PASSWORD")
-        mail_to = os.getenv("MAIL_TO", "ashutosh.code.in@gmail.com")
+        import threading
 
-        if all([mail_server, mail_username, mail_password, mail_to]):
+        def send_email_notification():
 
-            email_msg = EmailMessage()
+            try:
+                mail_server = os.getenv("MAIL_SERVER")
+                mail_port = int(
+                    os.getenv("MAIL_PORT", "587")
+                )
+                mail_username = os.getenv(
+                    "MAIL_USERNAME"
+                )
+                mail_password = os.getenv(
+                    "MAIL_PASSWORD"
+                )
+                mail_to = os.getenv(
+                    "MAIL_TO",
+                    "ashutosh.codes.in@gmail.com"
+                )
 
-            email_msg["Subject"] = "New Portfolio Contact Message"
-            email_msg["From"] = mail_username
-            email_msg["To"] = mail_to
+                if all([
+                    mail_server,
+                    mail_username,
+                    mail_password,
+                    mail_to
+                ]):
 
-            email_msg.set_content(
-                f"""You received a new message through your portfolio website.
+                    email_msg = EmailMessage()
+
+                    email_msg["Subject"] = (
+                        "New Portfolio Contact Message"
+                    )
+
+                    email_msg["From"] = mail_username
+                    email_msg["To"] = mail_to
+
+                    email_msg.set_content(
+                        f"""You received a new message through your portfolio website.
 
 Name: {name}
 Email: {email}
@@ -275,17 +276,46 @@ Email: {email}
 Message:
 {message}
 
-Date & Time: {date_time}
+Date & Time:
+{date_time}
 """
-            )
+                    )
 
-            with smtplib.SMTP(mail_server, mail_port) as smtp:
-                smtp.starttls()
-                smtp.login(mail_username, mail_password)
-                smtp.send_message(email_msg)
+                    with smtplib.SMTP(
+                        mail_server,
+                        mail_port,
+                        timeout=10
+                    ) as smtp:
 
-    except Exception as email_error:
-        print("Email notification failed:", email_error)
+                        smtp.starttls()
+
+                        smtp.login(
+                            mail_username,
+                            mail_password
+                        )
+
+                        smtp.send_message(
+                            email_msg
+                        )
+
+            except Exception as email_error:
+
+                print(
+                    "Email notification failed:",
+                    email_error
+                )
+
+        threading.Thread(
+            target=send_email_notification,
+            daemon=True
+        ).start()
+
+    except Exception as thread_error:
+
+        print(
+            "Email thread failed:",
+            thread_error
+        )
 
     return "Message received and saved successfully!"
 
