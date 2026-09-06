@@ -34,11 +34,49 @@ app.config.update(
 )
 
 
-# CSRF Protection
+# =====================================================
+# SECURITY HEADERS
+# =====================================================
+
+@app.after_request
+def add_security_headers(response):
+
+    response.headers["X-Content-Type-Options"] = "nosniff"
+
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+
+    response.headers["Permissions-Policy"] = (
+        "camera=(), microphone=(), geolocation=()"
+    )
+
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "img-src 'self' data: https:; "
+        "style-src 'self' 'unsafe-inline'; "
+        "script-src 'self' 'unsafe-inline'; "
+        "font-src 'self' https: data:; "
+        "connect-src 'self' https:; "
+        "frame-ancestors 'self'; "
+        "base-uri 'self'; "
+        "form-action 'self'"
+    )
+
+    return response
+
+
+# =====================================================
+# CSRF PROTECTION
+# =====================================================
+
 csrf = CSRFProtect(app)
 
 
-# Login rate limiting
+# =====================================================
+# LOGIN RATE LIMITING
+# =====================================================
+
 limiter = Limiter(
     key_func=get_remote_address,
     app=app,
@@ -51,6 +89,7 @@ limiter = Limiter(
 # =====================================================
 
 def get_db_connection():
+
     return psycopg2.connect(DATABASE_URL)
 
 
