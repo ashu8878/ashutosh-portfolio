@@ -10,2118 +10,967 @@ content="Ashutosh Tripathi - BCA Graduate, MCA Student, Python and Excel Learner
 <title>Ashutosh Tripathi | Portfolio</title>
 
 <style>
-
-/* =====================================================
-   ROOT
-===================================================== */
-
 :root{
-    --bg:#06101d;
-    --bg2:#0b1728;
-    --card:rgba(17,29,46,.90);
-    --text:#ffffff;
-    --muted:#b8c4d5;
-    --border:rgba(148,163,184,.20);
-    --primary:#38bdf8;
-    --primary2:#7dd3fc;
-    --nav:rgba(2,6,23,.94);
-    --dark:#020617;
-    --success:#22c55e;
+    --bg:#0b1220;
+    --bg-soft:#101a2b;
+    --surface:#111c2d;
+    --surface-2:#0e1726;
+    --text:#f3f7fb;
+    --muted:#a8b5c6;
+    --primary:#48b5ff;
+    --primary-dark:#74c7ff;
+    --border:rgba(255,255,255,.10);
+    --shadow:0 18px 45px rgba(0,0,0,.28);
+    --shadow-soft:0 10px 28px rgba(0,0,0,.22);
+    --success:#57d98a;
+    --nav:rgba(17,28,45,.88);
+    --hero-dark:#0d2237;
 }
-
 body.light{
-    --bg:#f1f5f9;
-    --bg2:#e2e8f0;
-    --card:rgba(255,255,255,.94);
+    --bg:#f6f9fc;
+    --bg-soft:#edf3f8;
+    --surface:#ffffff;
+    --surface-2:#f8fbfd;
     --text:#0f172a;
-    --muted:#475569;
-    --border:rgba(15,23,42,.12);
-    --nav:rgba(241,245,249,.96);
-    --dark:#e2e8f0;
+    --muted:#5c6b7c;
+    --border:rgba(15,23,42,.09);
+    --nav:rgba(255,255,255,.92);
 }
-
-/* =====================================================
-   RESET
-===================================================== */
-
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
-    font-family:Arial,Helvetica,sans-serif;
-    background:linear-gradient(180deg,var(--bg),var(--bg2));
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:linear-gradient(180deg,var(--bg),var(--bg-soft));
     color:var(--text);
     line-height:1.6;
     overflow-x:hidden;
 }
+a{text-decoration:none;color:inherit}
+button,input,textarea{font:inherit}
+button{border:0}
+img{max-width:100%}
+section{padding:100px 7%;position:relative}
+section[id]{scroll-margin-top:92px}
+::-webkit-scrollbar{width:9px}
+::-webkit-scrollbar-track{background:#eaf1f7}
+::-webkit-scrollbar-thumb{background:#a9bfd1;border-radius:20px}
+::-webkit-scrollbar-thumb:hover{background:#8da9bd}
 
-a{
-    text-decoration:none;
-    color:inherit;
-}
-
-button,
-input,
-textarea{
-    font:inherit;
-}
-
-button{
-    border:0;
-}
-
-section{
-    padding:90px 7%;
-}
-
-/* =====================================================
-   SCROLLBAR
-===================================================== */
-
-::-webkit-scrollbar{
-    width:8px;
-}
-
-::-webkit-scrollbar-track{
-    background:var(--dark);
-}
-
-::-webkit-scrollbar-thumb{
-    background:var(--primary);
-    border-radius:20px;
-}
-
-/* =====================================================
-   NAVBAR
-===================================================== */
-
+/* NAVBAR */
 nav{
     position:sticky;
-    top:0;
+    top:14px;
     z-index:1000;
-
+    width:min(1180px,calc(100% - 32px));
+    margin:14px auto 0;
+    padding:13px 16px 13px 18px;
     display:flex;
-    justify-content:space-between;
     align-items:center;
-
-    padding:15px 7%;
-
+    justify-content:space-between;
+    gap:18px;
     background:var(--nav);
+    border:1px solid rgba(255,255,255,.68);
+    border-radius:18px;
+    box-shadow:var(--shadow-soft);
     backdrop-filter:blur(16px);
-
-    border-bottom:1px solid var(--border);
 }
-
 .logo{
     display:flex;
     align-items:center;
     gap:10px;
-
-    color:var(--primary);
-    font-size:24px;
+    color:var(--text);
+    font-size:16px;
     font-weight:800;
+    letter-spacing:.06em;
+    white-space:nowrap;
 }
-
 .logo-dot{
-    width:9px;
-    height:9px;
-
+    width:10px;height:10px;border-radius:50%;
     background:var(--primary);
-    border-radius:50%;
-
-    box-shadow:0 0 15px var(--primary);
+    box-shadow:0 0 0 5px rgba(21,151,229,.10);
 }
-
 .nav-links{
     display:flex;
     align-items:center;
-    gap:18px;
-
+    justify-content:center;
+    gap:6px;
     list-style:none;
 }
-
 .nav-links a{
     position:relative;
-
+    padding:9px 11px;
+    border-radius:10px;
     color:var(--muted);
-    font-size:14px;
-
-    transition:.3s;
+    font-size:13px;
+    font-weight:600;
+    transition:color .2s ease,background .2s ease,transform .2s ease;
 }
-
 .nav-links a:hover,
 .nav-links a.active{
-    color:var(--primary);
+    color:var(--primary-dark);
+    background:rgba(21,151,229,.07);
 }
-
-.nav-links a::after{
-    content:"";
-
-    position:absolute;
-    left:0;
-    bottom:-6px;
-
-    width:0;
-    height:2px;
-
-    background:var(--primary);
-
-    transition:.3s;
+.nav-links a:focus-visible,
+.nav-btn:focus-visible,
+.btn:focus-visible,
+.social-large:focus-visible,
+.hero-social-card:focus-visible,
+.top:focus-visible{
+    outline:3px solid rgba(21,151,229,.28);
+    outline-offset:3px;
 }
-
-.nav-links a:hover::after,
-.nav-links a.active::after{
-    width:100%;
-}
-
-.nav-tools{
-    display:flex;
-    gap:8px;
-}
-
+.nav-tools{display:flex;gap:8px}
 .nav-btn{
-    width:40px;
-    height:40px;
-
+    width:40px;height:40px;
     border:1px solid var(--border);
-    border-radius:9px;
-
-    background:rgba(255,255,255,.04);
-
+    border-radius:11px;
+    background:var(--surface);
     color:var(--text);
-
     cursor:pointer;
-
-    transition:.3s;
+    transition:transform .2s ease,border-color .2s ease,color .2s ease;
 }
+.nav-btn:hover{transform:translateY(-1px);border-color:rgba(21,151,229,.35);color:var(--primary-dark)}
+.menu-btn{display:none}
 
-.nav-btn:hover{
-    border-color:var(--primary);
-    color:var(--primary);
-}
-
-.menu-btn{
-    display:none;
-}
-
-/* =====================================================
-   HERO
-===================================================== */
-
+/* HERO */
 .hero{
-    position:relative;
-
-    min-height:94vh;
-
+    max-width:1260px;
+    margin:28px auto 0;
+    min-height:calc(100vh - 120px);
+    padding:42px 6%;
     display:flex;
-    justify-content:center;
     align-items:center;
-
-    text-align:center;
-
-    padding:80px 20px;
-
     overflow:hidden;
-
-    isolation:isolate;
-
-    background:#020617;
+    border-radius:32px;
+    background:
+        linear-gradient(135deg,rgba(233,246,255,.98),rgba(246,250,253,.97));
+    box-shadow:var(--shadow);
 }
-
-/*
-   BACKGROUND IMAGE
-   File must be in same folder:
-   /static/optimus-prime.jpg
-*/
-
 .hero-bg{
     position:absolute;
-    inset:0;
-
-    width:100%;
+    right:-5%;
+    top:0;
+    width:48%;
     height:100%;
-
     object-fit:cover;
     object-position:center;
-
-    z-index:-2;
-
-    transform:scale(1.03);
+    opacity:.14;
+    filter:saturate(.65);
 }
-
-/* Dark overlay */
-
 .hero::before{
     content:"";
-
     position:absolute;
-    inset:0;
-
-    z-index:-1;
-
-    background:
-    linear-gradient(
-        90deg,
-        rgba(2,6,23,.96) 0%,
-        rgba(2,6,23,.72) 48%,
-        rgba(2,6,23,.95) 100%
-    );
+    right:-160px;
+    top:-120px;
+    width:540px;height:540px;
+    border:1px solid rgba(21,151,229,.12);
+    border-radius:50%;
 }
-
+.hero::after{
+    content:"";
+    position:absolute;
+    right:0;
+    bottom:0;
+    width:48%;
+    height:72%;
+    background:linear-gradient(180deg,transparent,rgba(233,246,255,.82));
+}
 .hero-content{
     position:relative;
-
     z-index:2;
-
-    max-width:950px;
-
-    animation:heroIn .8s ease;
+    width:100%;
+    max-width:1120px;
+    margin:0 auto;
+    display:grid;
+    grid-template-columns:minmax(250px,.8fr) minmax(0,1.45fr);
+    align-items:center;
+    gap:44px;
 }
-
-/* =====================================================
-   PROFILE PHOTO
-===================================================== */
-
+.hero-profile-card{
+    display:block;
+}
 .profile-wrapper{
-    width:145px;
-    height:145px;
-
-    margin:0 auto 20px;
-
-    padding:4px;
-
-    border-radius:50%;
-
-    background:
-    linear-gradient(
-        135deg,
-        var(--primary),
-        transparent,
-        var(--primary)
-    );
-
-    box-shadow:
-    0 0 30px rgba(56,189,248,.25);
+    width:190px;height:190px;
+    margin:0 0 20px;
+    padding:7px;
+    border-radius:32px;
+    background:linear-gradient(145deg,#fff,rgba(255,255,255,.45));
+    box-shadow:0 22px 50px rgba(20,70,100,.14);
 }
-
 .profile-wrapper img{
-    width:100%;
-    height:100%;
-
-    border-radius:50%;
-
+    width:100%;height:100%;
+    border-radius:26px;
     object-fit:cover;
-
     display:block;
-
-    background:#0f172a;
+    background:#dceaf4;
 }
-
-/* =====================================================
-   HERO CONTENT
-===================================================== */
-
 .hero-badge{
-    display:inline-block;
-
-    padding:8px 15px;
-
-    margin-bottom:18px;
-
-    border:1px solid var(--primary);
-
-    border-radius:30px;
-
-    background:rgba(56,189,248,.08);
-
-    color:var(--primary);
-
-    font-size:13px;
-}
-
-.hello{
-    color:var(--primary);
-
-    font-size:19px;
-
-    margin-bottom:8px;
-}
-
-.hero h1{
-    font-size:clamp(44px,8vw,78px);
-
-    line-height:1.05;
-
-    margin-bottom:15px;
-}
-
-.hero h1 span{
-    color:var(--primary);
-
-    text-shadow:
-    0 0 30px rgba(56,189,248,.3);
-}
-
-.typing-line{
-    min-height:42px;
-
-    font-size:clamp(21px,3vw,28px);
-
-    color:#e2e8f0;
-
-    margin-bottom:18px;
-}
-
-.typing{
-    color:var(--primary);
-
-    border-right:2px solid var(--primary);
-
-    padding-right:5px;
-
-    animation:blink .7s infinite;
-}
-
-.hero-description{
-    max-width:760px;
-
-    margin:auto;
-
-    color:#d5deeb;
-
-    font-size:17px;
-}
-
-/* =====================================================
-   BUTTONS
-===================================================== */
-
-.hero-buttons{
-    margin-top:28px;
-}
-
-.btn{
-    display:inline-block;
-
-    padding:13px 22px;
-
-    margin:5px;
-
-    border-radius:9px;
-
-    background:var(--primary);
-
-    color:#020617;
-
-    border:2px solid var(--primary);
-
-    font-weight:700;
-
-    cursor:pointer;
-
-    transition:.3s;
-}
-
-.btn:hover{
-    transform:translateY(-3px);
-
-    background:var(--primary2);
-
-    border-color:var(--primary2);
-}
-
-.btn-outline{
-    background:transparent;
-
-    color:var(--primary);
-}
-
-.btn-outline:hover{
-    background:var(--primary);
-
-    color:#020617;
-}
-
-/* =====================================================
-   HERO SOCIAL
-===================================================== */
-
-.hero-socials{
-    display:flex;
-
-    justify-content:center;
-
-    flex-wrap:wrap;
-
-    gap:15px;
-
-    margin-top:25px;
-}
-
-.hero-social-card{
-    min-width:145px;
-
-    padding:12px 20px;
-
-    border:1px solid var(--border);
-
-    border-radius:12px;
-
-    background:rgba(255,255,255,.04);
-
-    color:#d6dfeb;
-
-    transition:.3s;
-}
-
-.hero-social-card strong{
-    display:block;
-
-    color:var(--primary);
-
-    font-size:16px;
-}
-
-.hero-social-card small{
-    color:var(--muted);
-
+    display:inline-flex;
+    align-items:center;
+    padding:7px 11px;
+    margin-bottom:14px;
+    border:1px solid rgba(21,151,229,.18);
+    border-radius:999px;
+    background:rgba(21,151,229,.07);
+    color:var(--primary-dark);
     font-size:12px;
+    font-weight:700;
 }
-
-.hero-social-card:hover{
-    transform:translateY(-5px);
-
-    border-color:var(--primary);
-
-    box-shadow:
-    0 0 20px rgba(56,189,248,.12);
-}
-
-/* =====================================================
-   COMMON
-===================================================== */
-
-.section-title{
-    text-align:center;
-
-    margin-bottom:45px;
-}
-
-.section-title h2{
-    color:var(--primary);
-
-    font-size:40px;
-
-    margin-bottom:8px;
-}
-
-.section-title p{
-    color:var(--muted);
-}
-
-.line{
-    width:65px;
-
-    height:3px;
-
-    margin:12px auto 0;
-
-    background:var(--primary);
-
-    border-radius:10px;
-}
-
-.box,
-.service,
-.skill,
-.focus-card,
-.contact-card,
-.resume-box,
-.education-card,
-.social-large{
-    background:var(--card);
-
-    border:1px solid var(--border);
-
-    backdrop-filter:blur(10px);
-}
-
-/* =====================================================
-   ABOUT
-===================================================== */
-
-.about-grid{
-    max-width:1050px;
-
-    margin:auto;
-
-    display:grid;
-
-    grid-template-columns:1.4fr .8fr;
-
-    gap:25px;
-}
-
-.box{
-    border-radius:16px;
-
-    padding:35px;
-
-    transition:.3s;
-}
-
-.box:hover,
-.service:hover,
-.skill:hover,
-.focus-card:hover,
-.education-card:hover,
-.social-large:hover{
-    transform:translateY(-6px);
-
-    border-color:var(--primary);
-}
-
-.about-text p{
-    color:var(--muted);
-
-    font-size:17px;
-
-    margin-bottom:15px;
-}
-
-.quick-info{
-    list-style:none;
-}
-
-.quick-info li{
-    padding:11px 0;
-
-    border-bottom:1px solid var(--border);
-
-    color:var(--muted);
-}
-
-.quick-info li:last-child{
-    border-bottom:0;
-}
-
-.quick-info strong{
-    color:var(--text);
-}
-
-/* =====================================================
-   EDUCATION
-===================================================== */
-
-.timeline{
-    max-width:900px;
-
-    margin:auto;
-}
-
-.education-card{
-    border-left:4px solid var(--primary);
-
-    border-radius:12px;
-
-    padding:28px;
-
+.hello{color:var(--primary-dark);font-size:15px;font-weight:700;margin-bottom:8px}
+.hero h1{
+    max-width:780px;
+    font-size:clamp(48px,7vw,88px);
+    line-height:.96;
+    letter-spacing:-.05em;
     margin-bottom:18px;
-
-    transition:.3s;
 }
-
-.education-card:hover{
-    transform:translateX(7px);
-
-    border-color:var(--primary);
-}
-
-.education-card h3{
-    color:var(--primary);
-
-    font-size:21px;
-
-    margin-bottom:7px;
-}
-
-.education-card h4{
-    margin-bottom:5px;
-}
-
-.education-card p{
-    color:var(--muted);
-}
-
-/* =====================================================
-   WHAT I DO
-===================================================== */
-
-.services{
-    display:grid;
-
-    grid-template-columns:
-    repeat(auto-fit,minmax(230px,1fr));
-
-    gap:22px;
-}
-
-.service{
-    border-radius:15px;
-
-    padding:28px;
-
-    transition:.3s;
-}
-
-.service-icon{
-    font-size:35px;
-
-    margin-bottom:12px;
-}
-
-.service h3{
-    color:var(--primary);
-
-    margin-bottom:10px;
-}
-
-.service p{
-    color:var(--muted);
-}
-
-/* =====================================================
-   SKILLS
-===================================================== */
-
-.skills{
-    display:grid;
-
-    grid-template-columns:
-    repeat(auto-fit,minmax(190px,1fr));
-
-    gap:20px;
-
-    max-width:1050px;
-
-    margin:auto;
-}
-
-.skill{
-    position:relative;
-
-    border-radius:15px;
-
-    padding:28px 20px;
-
-    text-align:center;
-
-    transition:.3s;
-
-    overflow:hidden;
-}
-
-.skill::before{
-    content:"";
-
-    position:absolute;
-
-    top:0;
-    left:0;
-
-    width:100%;
-    height:3px;
-
-    background:var(--primary);
-
-    transform:scaleX(0);
-
-    transform-origin:left;
-
-    transition:.3s;
-}
-
-.skill:hover::before{
-    transform:scaleX(1);
-}
-
-.skill-icon{
-    font-size:38px;
-
-    margin-bottom:10px;
-}
-
-.skill h3{
-    margin-bottom:8px;
-}
-
-.skill small{
-    color:var(--muted);
-}
-
-.skill-status{
-    display:inline-block;
-
-    margin-top:12px;
-
-    padding:5px 10px;
-
-    border-radius:20px;
-
-    font-size:11px;
-
-    border:1px solid var(--border);
-}
-
-.known{
-    color:var(--success);
-
-    border-color:rgba(34,197,94,.35);
-}
-
-.learning{
-    color:var(--primary);
-
-    border-color:rgba(56,189,248,.35);
-}
-
-/* =====================================================
-   CURRENT FOCUS
-===================================================== */
-
-.focus-grid{
-    max-width:1050px;
-
-    margin:auto;
-
-    display:grid;
-
-    grid-template-columns:
-    repeat(auto-fit,minmax(220px,1fr));
-
-    gap:20px;
-}
-
-.focus-card{
-    border-radius:15px;
-
-    padding:28px;
-
-    transition:.3s;
-}
-
-.focus-card h3{
-    color:var(--primary);
-
-    margin-bottom:10px;
-}
-
-.focus-card p{
-    color:var(--muted);
-}
-
-/* =====================================================
-   RESUME
-===================================================== */
-
-.resume-box{
-    max-width:850px;
-
-    margin:auto;
-
-    padding:45px;
-
-    text-align:center;
-
-    border-radius:18px;
-}
-
-.resume-box h3{
-    font-size:28px;
-
-    margin-bottom:12px;
-
-    color:var(--primary);
-}
-
-.resume-box p{
-    color:var(--muted);
-
-    margin-bottom:20px;
-}
-
-/* =====================================================
-   CONTACT
-===================================================== */
-
-.contact-grid{
-    max-width:1050px;
-
-    margin:auto;
-
-    display:grid;
-
-    grid-template-columns:1fr 1fr;
-
-    gap:25px;
-}
-
-.contact-card{
-    border-radius:16px;
-
-    padding:35px;
-}
-
-.contact-card h3{
-    color:var(--primary);
-
-    font-size:25px;
-
-    margin-bottom:20px;
-}
-
-.contact-item{
-    color:var(--muted);
-
-    padding:12px 0;
-
-    border-bottom:1px solid var(--border);
-}
-
-.contact-item strong{
-    color:var(--text);
-
-    margin-left:5px;
-}
-
-.social-large-wrapper{
-    display:grid;
-
-    grid-template-columns:1fr 1fr;
-
-    gap:15px;
-
-    margin-top:20px;
-}
-
-.social-large{
-    border-radius:14px;
-
-    padding:20px;
-
-    transition:.3s;
-}
-
-.social-icon{
-    font-size:28px;
-
-    margin-bottom:8px;
-}
-
-.social-large strong{
+.hero h1 span{
     display:block;
-
-    color:var(--primary);
+    color:transparent;
+    -webkit-text-stroke:1.5px rgba(15,23,42,.34);
 }
-
-.social-large small{
-    color:var(--muted);
-}
-
-.form-group{
-    margin-bottom:17px;
-}
-
-.form-group label{
-    display:block;
-
-    margin-bottom:7px;
-
-    color:var(--text);
-
+.typing-line{
+    min-height:38px;
+    font-size:clamp(19px,2.2vw,27px);
+    color:#314257;
+    margin-bottom:16px;
     font-weight:600;
 }
-
-.form-group input,
-.form-group textarea{
-    width:100%;
-
-    padding:12px 14px;
-
-    border:1px solid var(--border);
-
-    border-radius:9px;
-
-    outline:none;
-
-    background:rgba(255,255,255,.04);
-
-    color:var(--text);
+.typing{
+    color:var(--primary-dark);
+    border-right:2px solid var(--primary);
+    padding-right:5px;
+    animation:blink .8s infinite;
 }
-
-.form-group input:focus,
-.form-group textarea:focus{
-    border-color:var(--primary);
-}
-
-.form-group textarea{
-    min-height:130px;
-
-    resize:vertical;
-}
-
-/* =====================================================
-   FOOTER
-===================================================== */
-
-footer{
-    text-align:center;
-
-    padding:28px 20px;
-
-    border-top:1px solid var(--border);
-
+.hero-description{
+    max-width:690px;
     color:var(--muted);
-
-    font-size:14px;
+    font-size:16px;
 }
-
-/* =====================================================
-   BACK TO TOP
-===================================================== */
-
-.top{
-    position:fixed;
-
-    right:25px;
-
-    bottom:25px;
-
-    width:45px;
-
-    height:45px;
-
-    border-radius:50%;
-
+.hero-buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:26px}
+.btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:46px;
+    padding:0 18px;
+    border-radius:13px;
     background:var(--primary);
-
-    color:#020617;
-
-    font-size:20px;
-
-    font-weight:bold;
-
+    color:#fff;
+    border:1px solid var(--primary);
+    font-weight:800;
+    font-size:14px;
     cursor:pointer;
-
-    opacity:0;
-
-    pointer-events:none;
-
-    transform:translateY(20px);
-
-    transition:.3s;
-
-    z-index:999;
+    transition:transform .2s ease,box-shadow .2s ease,background .2s ease,border-color .2s ease;
+    box-shadow:0 10px 22px rgba(21,151,229,.20);
 }
-
-.top.show{
-    opacity:1;
-
-    pointer-events:auto;
-
-    transform:translateY(0);
+.btn:hover{transform:translateY(-2px);background:var(--primary-dark);border-color:var(--primary-dark);box-shadow:0 13px 25px rgba(21,151,229,.24)}
+.btn:active{transform:translateY(0)}
+.btn-outline{background:transparent;color:var(--primary-dark);box-shadow:none}
+.btn-outline:hover{background:rgba(21,151,229,.07);color:var(--primary-dark);box-shadow:none}
+.hero-socials{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(150px,190px));
+    gap:10px;
+    margin-top:28px;
 }
-
-/* =====================================================
-   ANIMATIONS
-===================================================== */
-
-.reveal{
-    opacity:0;
-
-    transform:translateY(30px);
-
-    transition:
-    opacity .7s ease,
-    transform .7s ease;
+.hero-social-card{
+    padding:13px 15px;
+    border:1px solid rgba(15,23,42,.08);
+    border-radius:14px;
+    background:rgba(255,255,255,.66);
+    box-shadow:0 8px 22px rgba(24,55,84,.07);
+    transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
 }
-
-.reveal.show{
-    opacity:1;
-
-    transform:translateY(0);
+.hero-social-card:hover{
+    transform:translateY(-3px);
+    border-color:rgba(21,151,229,.3);
+    box-shadow:0 12px 24px rgba(24,55,84,.10);
 }
+.hero-social-card strong{display:block;color:var(--text);font-size:14px}
+.hero-social-card small{color:var(--muted);font-size:11px}
 
-@keyframes heroIn{
-
-    from{
-        opacity:0;
-        transform:translateY(25px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-
+/* COMMON */
+.section-shell{max-width:1160px;margin:0 auto}
+.section-title{text-align:left;margin:0 auto 40px;max-width:1160px}
+.section-title h2{
+    color:var(--text);
+    font-size:clamp(34px,5vw,56px);
+    line-height:1;
+    letter-spacing:-.04em;
+    margin-bottom:8px;
 }
-
-@keyframes blink{
-
-    50%{
-        border-color:transparent;
-    }
-
+.section-title p{color:var(--muted);font-size:14px}
+.line{width:54px;height:4px;margin-top:15px;background:var(--primary);border-radius:20px}
+.box,.service,.skill,.focus-card,.contact-card,.resume-box,.education-card,.social-large{
+    background:var(--surface);
+    border:1px solid var(--border);
+    box-shadow:var(--shadow-soft);
 }
-
-/* =====================================================
-   MOBILE
-===================================================== */
-
+.about-grid{
+    max-width:1160px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:minmax(0,1.2fr) minmax(280px,.8fr);
+    gap:22px;
+}
+.box{
+    border-radius:24px;
+    padding:34px;
+    transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
+}
+.box:hover,.service:hover,.skill:hover,.focus-card:hover,.education-card:hover,.social-large:hover{
+    transform:translateY(-4px);
+    border-color:rgba(21,151,229,.24);
+    box-shadow:0 18px 35px rgba(24,55,84,.10);
+}
+.about-text p{color:var(--muted);font-size:16px;margin-bottom:15px}
+.about-text p:last-child{margin-bottom:0}
+.quick-info{list-style:none}
+.quick-info li{padding:13px 0;border-bottom:1px solid var(--border);color:var(--muted);font-size:14px}
+.quick-info li:last-child{border-bottom:0}
+.quick-info strong{color:var(--text)}
+/* EDUCATION */
+.timeline{
+    max-width:1160px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:20px;
+}
+.education-card{
+    position:relative;
+    border-radius:22px;
+    padding:28px 28px 28px 32px;
+    overflow:hidden;
+}
+.education-card::before{
+    content:"";
+    position:absolute;
+    left:0;top:0;bottom:0;width:5px;
+    background:var(--primary);
+}
+.education-card h3{font-size:26px;margin-bottom:8px}
+.education-card h4{font-size:15px;margin-bottom:7px}
+.education-card p{color:var(--muted);font-size:14px}
+/* WHAT I DO */
+.services{
+    max-width:1160px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:18px;
+}
+.service{
+    border-radius:22px;
+    padding:26px;
+    transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
+}
+.service-icon{
+    width:46px;height:46px;
+    display:grid;place-items:center;
+    border-radius:14px;
+    background:rgba(21,151,229,.08);
+    font-size:23px;
+    margin-bottom:18px;
+}
+.service h3{font-size:20px;margin-bottom:9px}
+.service p{color:var(--muted);font-size:14px}
+/* SKILLS */
+.skills{
+    max-width:1160px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:18px;
+}
+.skill{
+    position:relative;
+    border-radius:22px;
+    padding:25px 20px;
+    text-align:left;
+    overflow:hidden;
+    transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
+}
+.skill::before{
+    content:"";
+    position:absolute;inset:auto 0 0 0;height:4px;
+    background:var(--primary);
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform .25s ease;
+}
+.skill:hover::before{transform:scaleX(1)}
+.skill-icon{
+    width:48px;height:48px;
+    display:grid;place-items:center;
+    border-radius:14px;
+    background:rgba(21,151,229,.08);
+    font-size:24px;
+    margin-bottom:16px;
+}
+.skill h3{font-size:19px;margin-bottom:4px}
+.skill small{color:var(--muted);font-size:12px}
+.skill-status{
+    display:inline-flex;
+    margin-top:15px;
+    padding:5px 10px;
+    border-radius:999px;
+    font-size:11px;
+    font-weight:700;
+    border:1px solid var(--border);
+}
+.known{color:var(--success);border-color:rgba(21,148,71,.20);background:rgba(21,148,71,.05)}
+.learning{color:var(--primary-dark);border-color:rgba(21,151,229,.20);background:rgba(21,151,229,.05)}
+/* FOCUS */
+.focus-grid{
+    max-width:1160px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:18px;
+}
+.focus-card{
+    border-radius:22px;
+    padding:26px;
+    transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease;
+}
+.focus-card h3{font-size:20px;margin-bottom:9px}
+.focus-card p{color:var(--muted);font-size:14px}
+/* RESUME */
+.resume-box{
+    max-width:1160px;
+    margin:auto;
+    padding:38px 42px;
+    border-radius:26px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:30px;
+}
+.resume-box h3{font-size:29px;line-height:1.1;margin-bottom:8px}
+.resume-box p{color:var(--muted);font-size:14px}
+/* CONTACT */
+.contact-grid{
+    max-width:1160px;
+    margin:auto;
+    display:grid;
+    grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);
+    gap:20px;
+}
+.contact-card{border-radius:24px;padding:32px}
+.contact-card h3{font-size:24px;margin-bottom:20px}
+.contact-item{color:var(--muted);padding:13px 0;border-bottom:1px solid var(--border);font-size:14px}
+.contact-item strong{color:var(--text);margin-left:5px}
+.social-large-wrapper{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.social-large{
+    border-radius:17px;padding:18px;
+    transition:transform .2s ease,box-shadow .2s ease,border-color .2s ease;
+}
+.social-icon{
+    width:42px;height:42px;display:grid;place-items:center;
+    border-radius:12px;background:rgba(21,151,229,.08);
+    font-size:21px;margin-bottom:10px
+}
+.social-large strong{display:block;font-size:14px}
+.social-large small{color:var(--muted);font-size:11px}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;margin-bottom:7px;color:var(--text);font-size:13px;font-weight:700}
+.form-group input,.form-group textarea{
+    width:100%;
+    padding:13px 14px;
+    border:1px solid var(--border);
+    border-radius:13px;
+    outline:none;
+    background:var(--surface-2);
+    color:var(--text);
+    transition:border-color .2s ease,box-shadow .2s ease,background .2s ease;
+}
+.form-group input::placeholder,.form-group textarea::placeholder{color:#8a98a8}
+.form-group input:focus,.form-group textarea:focus{
+    border-color:rgba(21,151,229,.55);
+    background:#fff;
+    box-shadow:0 0 0 4px rgba(21,151,229,.09);
+}
+.form-group textarea{min-height:140px;resize:vertical}
+/* FOOTER */
+footer{
+    max-width:1160px;
+    margin:30px auto 0;
+    padding:26px 20px 34px;
+    border-top:1px solid var(--border);
+    color:var(--muted);
+    font-size:13px;
+    text-align:center;
+}
+/* BACK TO TOP */
+.top{
+    position:fixed;right:22px;bottom:22px;
+    width:45px;height:45px;border-radius:14px;
+    background:var(--text);color:#fff;
+    font-size:19px;font-weight:800;cursor:pointer;
+    opacity:0;pointer-events:none;transform:translateY(12px);
+    transition:.2s;z-index:999;
+    box-shadow:0 14px 28px rgba(24,55,84,.17);
+}
+.top.show{opacity:1;pointer-events:auto;transform:translateY(0)}
+/* ANIMATIONS */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .55s ease,transform .55s ease}
+.reveal.show{opacity:1;transform:translateY(0)}
+@keyframes heroIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes blink{50%{border-color:transparent}}
+.hero-content{animation:heroIn .65s ease}
+@media(prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+}
+/* RESPONSIVE */
+@media(max-width:1050px){
+    nav{width:min(1100px,calc(100% - 24px))}
+    .services,.skills,.focus-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .hero-content{grid-template-columns:220px minmax(0,1fr);gap:34px}
+    .profile-wrapper{width:170px;height:170px}
+    .hero h1{font-size:clamp(44px,7vw,72px)}
+}
 @media(max-width:850px){
-
+    nav{top:8px;margin-top:8px}
     .nav-links{
-        display:none;
-
-        position:absolute;
-
-        left:0;
-        right:0;
-
-        top:70px;
-
-        padding:18px 7%;
-
-        background:var(--nav);
-
-        flex-direction:column;
-
-        align-items:flex-start;
-
-        border-bottom:1px solid var(--border);
+        display:none;position:absolute;left:0;right:0;top:64px;
+        padding:12px;background:var(--nav);
+        flex-direction:column;align-items:stretch;
+        border:1px solid var(--border);border-radius:16px;box-shadow:var(--shadow-soft)
     }
-
-    .nav-links.open{
-        display:flex;
-    }
-
-    .menu-btn{
-        display:block;
-    }
-
-    .about-grid,
-    .contact-grid{
-        grid-template-columns:1fr;
-    }
-
-}
-
-@media(max-width:600px){
-
-    section{
-        padding:75px 5%;
-    }
-
+    .nav-links.open{display:flex}
+    .nav-links a{display:block}
+    .menu-btn{display:block}
     .hero{
-        min-height:88vh;
-
-        padding:65px 18px;
+        margin-top:18px;
+        min-height:auto;
+        padding:70px 7%;
     }
-
-    .profile-wrapper{
-        width:120px;
-        height:120px;
-    }
-
-    .hero h1{
-        font-size:48px;
-    }
-
-    .hero-buttons .btn{
-        width:100%;
-
-        margin:5px 0;
-    }
-
-    .hero-social-card{
-        width:100%;
-    }
-
-    .hero-socials{
-        flex-direction:column;
-
-        align-items:center;
-    }
-
-    .section-title h2{
-        font-size:32px;
-    }
-
-    .box,
-    .resume-box,
-    .contact-card{
-        padding:24px;
-    }
-
-    .social-large-wrapper{
-        grid-template-columns:1fr;
-    }
-
+    .hero-content{grid-template-columns:1fr;gap:24px}
+    .profile-wrapper{margin:0 auto;width:150px;height:150px}
+    .hero-profile-card{text-align:center}
+    .hero-buttons,.hero-socials{justify-content:center}
+    .hero-description{margin:auto}
+    .hero::after{width:100%;height:55%}
+    .hero-bg{width:80%;opacity:.1}
+    .about-grid,.contact-grid{grid-template-columns:1fr}
+    .timeline{grid-template-columns:1fr}
+    .resume-box{align-items:flex-start;flex-direction:column}
 }
-
+@media(max-width:600px){
+    section{padding:76px 5%}
+    nav{padding:11px 12px 11px 14px}
+    .logo{font-size:13px}
+    .hero{border-radius:24px;padding:58px 6%}
+    .hero h1{font-size:50px}
+    .hero h1 span{-webkit-text-stroke-width:1px}
+    .typing-line{font-size:18px}
+    .hero-description{font-size:14px}
+    .hero-buttons{flex-direction:column;align-items:stretch}
+    .hero-buttons .btn{width:100%;margin:0}
+    .hero-socials{grid-template-columns:1fr;width:100%;max-width:320px;margin-left:auto;margin-right:auto}
+    .section-title{margin-bottom:30px}
+    .section-title h2{font-size:38px}
+    .services,.skills,.focus-grid{grid-template-columns:1fr}
+    .box,.resume-box,.contact-card{padding:24px}
+    .social-large-wrapper{grid-template-columns:1fr}
+    .top{right:16px;bottom:16px}
+}
+/* DARK THEME REFINEMENT */
+body:not(.light) nav{border-color:rgba(255,255,255,.10);}
+body:not(.light) .hero{
+    background:linear-gradient(135deg,rgba(15,28,46,.98),rgba(13,24,40,.98));
+}
+body:not(.light) .hero::after{
+    background:linear-gradient(180deg,transparent,rgba(13,24,40,.88));
+}
+body:not(.light) .hero h1 span{
+    -webkit-text-stroke-color:rgba(243,247,251,.34);
+}
+body:not(.light) .typing-line{color:#c2cedc;}
+body:not(.light) .hero-social-card{
+    border-color:rgba(255,255,255,.09);
+    background:rgba(17,28,45,.72);
+}
+body:not(.light) .profile-wrapper{
+    background:linear-gradient(145deg,#17273c,rgba(23,39,60,.72));
+    box-shadow:0 22px 50px rgba(0,0,0,.28);
+}
+body:not(.light) .profile-wrapper img{background:#18283d;}
+body:not(.light) .form-group input:focus,
+body:not(.light) .form-group textarea:focus{
+    background:var(--surface-2);
+}
+body:not(.light) .form-group input::placeholder,
+body:not(.light) .form-group textarea::placeholder{color:#718198;}
+body:not(.light) ::-webkit-scrollbar-track{background:#0f1928;}
+body:not(.light) ::-webkit-scrollbar-thumb{background:#42566d;}
+body:not(.light) ::-webkit-scrollbar-thumb:hover{background:#566b82;}
 </style>
 </head>
 
 <body>
 
-<!-- =====================================================
-     NAVBAR
-===================================================== -->
-
+<!-- NAVBAR -->
 <nav>
-
     <a class="logo" href="#home">
-
         <span class="logo-dot"></span>
-
         ASHUTOSH TRIPATHI
-
     </a>
 
-
     <ul class="nav-links" id="navLinks">
-
-        <li>
-            <a class="nav-link active" href="#home">
-                Home
-            </a>
-        </li>
-
-        <li>
-            <a class="nav-link" href="#about">
-                About
-            </a>
-        </li>
-
-        <li>
-            <a class="nav-link" href="#education">
-                Education
-            </a>
-        </li>
-
-        <li>
-            <a class="nav-link" href="#skills">
-                Skills
-            </a>
-        </li>
-
-        <li>
-            <a class="nav-link" href="#focus">
-                Current Focus
-            </a>
-        </li>
-
-        <li>
-            <a class="nav-link" href="#resume">
-                Resume
-            </a>
-        </li>
-
-        <li>
-            <a class="nav-link" href="#contact">
-                Contact
-            </a>
-        </li>
-
+        <li><a class="nav-link active" href="#home">Home</a></li>
+        <li><a class="nav-link" href="#about">About</a></li>
+        <li><a class="nav-link" href="#education">Education</a></li>
+        <li><a class="nav-link" href="#skills">Skills</a></li>
+        <li><a class="nav-link" href="#focus">Current Focus</a></li>
+        <li><a class="nav-link" href="#resume">Resume</a></li>
+        <li><a class="nav-link" href="#contact">Contact</a></li>
     </ul>
 
-
     <div class="nav-tools">
-
-        <button
-            class="nav-btn"
-            id="themeBtn"
-            type="button">
-            ☀️
-        </button>
-
-        <button
-            class="nav-btn menu-btn"
-            id="menuBtn"
-            type="button">
-            ☰
-        </button>
-
+        <button class="nav-btn" id="themeBtn" type="button" aria-label="Toggle theme">☀️</button>
+        <button class="nav-btn menu-btn" id="menuBtn" type="button" aria-label="Open menu">☰</button>
     </div>
-
 </nav>
 
-
-<!-- =====================================================
-     HERO
-===================================================== -->
-
+<!-- HERO -->
 <section class="hero" id="home">
-
-    <!-- BACKGROUND IMAGE -->
-    <img
-        class="hero-bg"
-        src="/static/optimus-prime.jpg"
-        alt=""
-    >
-
+    <img class="hero-bg" src="/static/portfolio-bg.jpg" alt="">
 
     <div class="hero-content">
+        <div class="hero-profile-card">
+            <div class="profile-wrapper">
+                <img src="/static/profile.jpg" alt="Ashutosh Tripathi">
+            </div>
 
-        <!-- PROFILE PHOTO -->
+            <div class="hero-badge">🚀 MCA Student • Fresher</div>
 
-        <div class="profile-wrapper">
+            <div class="hero-socials">
+                <a class="hero-social-card" id="heroGithub"
+                   href="https://github.com/ashu8878"
+                   target="_blank" rel="noopener noreferrer">
+                    <strong>GitHub</strong>
+                    <small>View my profile</small>
+                </a>
 
-            <img
-                src="/static/profile.jpg"
-                alt="Ashutosh Tripathi"
-            >
-
+                <a class="hero-social-card" id="heroLinkedin"
+                   href="https://www.linkedin.com/in/ashutosh-tripathi-8850762bb/"
+                   target="_blank" rel="noopener noreferrer">
+                    <strong>LinkedIn</strong>
+                    <small>Connect with me</small>
+                </a>
+            </div>
         </div>
 
+        <div>
+            <div class="hello">Hello, I'm</div>
 
-        <div class="hero-badge">
-            🚀 MCA Student • Fresher
+            <h1>
+                Ashutosh <span>Tripathi</span>
+            </h1>
+
+            <div class="typing-line">
+                I am
+                <span class="typing" id="typing"></span>
+            </div>
+
+            <p class="hero-description">
+                I am a BCA graduate and an MCA Student building
+                practical skills in Python, Excel, and data analytics.
+                I am currently learning SQL and improving my technical
+                knowledge step by step.
+            </p>
+
+            <div class="hero-buttons">
+                <a class="btn" href="#skills">View My Skills</a>
+                <a class="btn btn-outline" href="#contact">Contact Me</a>
+                <a class="btn" href="/static/CV.pdf" target="_blank" rel="noopener noreferrer">Download CV</a>
+            </div>
         </div>
-
-
-        <div class="hello">
-            Hello, I'm
-        </div>
-
-
-        <h1>
-            Ashutosh <span>Tripathi</span>
-        </h1>
-
-
-        <div class="typing-line">
-
-            I am
-            <span
-                class="typing"
-                id="typing">
-            </span>
-
-        </div>
-
-
-        <p class="hero-description">
-
-            I am a BCA graduate and an MCA student building
-            practical skills in Python, Excel, and data analytics.
-            I am currently learning SQL and improving my technical
-            knowledge step by step.
-
-        </p>
-
-
-        <div class="hero-buttons">
-
-            <a
-                class="btn"
-                href="#skills">
-                View My Skills
-            </a>
-
-
-            <a
-                class="btn btn-outline"
-                href="#contact">
-                Contact Me
-            </a>
-
-
-            <a
-                class="btn"
-                href="/static/CV.pdf"
-                target="_blank"
-                rel="noopener noreferrer">
-                Download CV
-            </a>
-
-        </div>
-
-
-        <div class="hero-socials">
-
-            <a
-                class="hero-social-card"
-                id="heroGithub"
-                href="https://github.com/ashu8878"
-                target="_blank"
-                rel="noopener noreferrer">
-
-                <strong>
-                    GitHub
-                </strong>
-
-                <small>
-                    View my profile
-                </small>
-
-            </a>
-
-
-            <a
-                class="hero-social-card"
-                id="heroLinkedin"
-                href="https://www.linkedin.com/in/ashutosh-tripathi-8850762bb/"
-                target="_blank"
-                rel="noopener noreferrer">
-
-                <strong>
-                    LinkedIn
-                </strong>
-
-                <small>
-                    Connect with me
-                </small>
-
-            </a>
-
-        </div>
-
     </div>
-
 </section>
 
-
-<!-- =====================================================
-     ABOUT
-===================================================== -->
-
+<!-- ABOUT -->
 <section id="about" class="reveal">
-
-    <div class="section-title">
-
-        <h2>
-            About Me
-        </h2>
-
-        <p>
-            Get to know me
-        </p>
-
-        <div class="line"></div>
-
-    </div>
-
-
-    <div class="about-grid">
-
-        <div class="box about-text">
-
-            <p>
-                I am a BCA graduate and am currently pursuing
-                an MCA. I am interested in Python, Excel, and
-                data analytics.
-            </p>
-
-            <p>
-                I believe in learning skills thoroughly before
-                adding them to my professional profile.
-                I am currently strengthening my fundamentals and
-                gradually moving toward practical projects.
-            </p>
-
-            <p>
-                My present focus is on improving my Python and
-                Excel skills while learning SQL and preparing
-                for future practical data analytics projects.
-            </p>
-
+    <div class="section-shell">
+        <div class="section-title">
+            <h2>About Me</h2>
+            <p>Get to know me</p>
+            <div class="line"></div>
         </div>
 
+        <div class="about-grid">
+            <div class="box about-text">
+                <p>
+                    I am a BCA graduate and am currently pursuing
+                     mca. I am interested in Python, Excel, and
+                    data analytics.
+                </p>
+                <p>
+                    I believe in learning skills thoroughly before
+                    adding them to my professional profile.
+                    I am currently strengthening my fundamentals and
+                    gradually moving toward practical projects.
+                </p>
+                <p>
+                    My present focus is on improving my Python and
+                    Excel skills while learning SQL and preparing
+                    for future practical data analytics projects.
+                </p>
+            </div>
 
-        <div class="box">
-
-            <ul class="quick-info">
-
-                <li>
-                    <strong>Education:</strong>
-                    MCA
-                </li>
-
-                <li>
-                    <strong>Degree:</strong>
-                    BCA Graduate
-                </li>
-
-                <li>
-                    <strong>Focus:</strong>
-                    Data Analytics
-                </li>
-
-                <li>
-                    <strong>Current Skills:</strong>
-                    Python, Excel, Pivot Tables
-                </li>
-
-                <li>
-                    <strong>Learning:</strong>
-                    SQL
-                </li>
-
-                <li>
-                    <strong>Status:</strong>
-                    Fresher
-                </li>
-
-            </ul>
-
+            <div class="box">
+                <ul class="quick-info">
+                    <li><strong>Education:</strong> MCA</li>
+                    <li><strong>Degree:</strong> BCA Graduate</li>
+                    <li><strong>Focus:</strong> Data Analytics</li>
+                    <li><strong>Current Skills:</strong> Python, Excel, Pivot Tables</li>
+                    <li><strong>Learning:</strong> SQL</li>
+                    <li><strong>Status:</strong> Fresher</li>
+                </ul>
+            </div>
         </div>
-
     </div>
-
 </section>
 
-
-<!-- =====================================================
-     EDUCATION
-===================================================== -->
-
+<!-- EDUCATION -->
 <section id="education" class="reveal">
-
-    <div class="section-title">
-
-        <h2>
-            Education
-        </h2>
-
-        <p>
-            My academic journey
-        </p>
-
-        <div class="line"></div>
-
-    </div>
-
-
-    <div class="timeline">
-
-        <div class="education-card">
-
-            <h3>
-                MCA
-            </h3>
-
-            <h4>
-                Dr. Ram Manohar Lohia Avadh University
-            </h4>
-
-            <p>
-                Currently Pursuing
-            </p>
-
+    <div class="section-shell">
+        <div class="section-title">
+            <h2>Education</h2>
+            <p>My academic journey</p>
+            <div class="line"></div>
         </div>
 
+        <div class="timeline">
+            <div class="education-card">
+                <h3>MCA</h3>
+                <h4>Dr. Ram Manohar Lohia Avadh University</h4>
+                <p>Currently Pursuing</p>
+            </div>
 
-        <div class="education-card">
-
-            <h3>
-                BCA
-            </h3>
-
-            <h4>
-                Dr. Ram Manohar Lohia Avadh University,
-                Ayodhya
-            </h4>
-
-            <p>
-                Graduation Completed
-            </p>
-
+            <div class="education-card">
+                <h3>BCA</h3>
+                <h4>Dr. Ram Manohar Lohia Avadh University, Ayodhya</h4>
+                <p>Graduation Completed</p>
+            </div>
         </div>
-
     </div>
-
 </section>
 
-
-<!-- =====================================================
-     WHAT I DO
-===================================================== -->
-
+<!-- WHAT I DO -->
 <section class="reveal">
+    <div class="section-shell">
+        <div class="section-title">
+            <h2>What I Do</h2>
+            <p>Areas I am working on</p>
+            <div class="line"></div>
+        </div>
 
-    <div class="section-title">
+        <div class="services">
+            <div class="service">
+                <div class="service-icon">🐍</div>
+                <h3>Python</h3>
+                <p>I am practicing Python fundamentals and improving my programming knowledge step by step.</p>
+            </div>
 
-        <h2>
-            What I Do
-        </h2>
+            <div class="service">
+                <div class="service-icon">📊</div>
+                <h3>Excel</h3>
+                <p>I am working with Excel formulas, handling data, and using Pivot Tables for practical analysis.</p>
+            </div>
 
-        <p>
-            Areas I am working on
-        </p>
+            <div class="service">
+                <div class="service-icon">🗄️</div>
+                <h3>SQL</h3>
+                <p>I am currently learning SQL and building a strong foundation in data analytics.</p>
+            </div>
 
-        <div class="line"></div>
-
+            <div class="service">
+                <div class="service-icon">📈</div>
+                <h3>Data Analytics</h3>
+                <p>I am preparing myself for future practical data analytics projects.</p>
+            </div>
+        </div>
     </div>
-
-
-    <div class="services">
-
-        <div class="service">
-
-            <div class="service-icon">
-                🐍
-            </div>
-
-            <h3>
-                Python
-            </h3>
-
-            <p>
-                I am practicing Python fundamentals and improving
-                my programming knowledge step by step.
-            </p>
-
-        </div>
-
-
-        <div class="service">
-
-            <div class="service-icon">
-                📊
-            </div>
-
-            <h3>
-                Excel
-            </h3>
-
-            <p>
-                I am working with Excel formulas, handling data,
-                and using Pivot Tables for practical analysis.
-            </p>
-
-        </div>
-
-
-        <div class="service">
-
-            <div class="service-icon">
-                🗄️
-            </div>
-
-            <h3>
-                SQL
-            </h3>
-
-            <p>
-                I am currently learning SQL and building a strong
-                foundation in data analytics.
-            </p>
-
-        </div>
-
-
-        <div class="service">
-
-            <div class="service-icon">
-                📈
-            </div>
-
-            <h3>
-                Data Analytics
-            </h3>
-
-            <p>
-                I am preparing myself for future practical data
-                analytics projects.
-            </p>
-
-        </div>
-
-    </div>
-
 </section>
 
-
-<!-- =====================================================
-     SKILLS
-===================================================== -->
-
+<!-- SKILLS -->
 <section id="skills" class="reveal">
+    <div class="section-shell">
+        <div class="section-title">
+            <h2>Skills</h2>
+            <p>My current technical skills</p>
+            <div class="line"></div>
+        </div>
 
-    <div class="section-title">
+        <div class="skills">
+            <div class="skill">
+                <div class="skill-icon">🐍</div>
+                <h3>Python</h3>
+                <small>Programming</small>
+                <br>
+                <span class="skill-status known">Known</span>
+            </div>
 
-        <h2>
-            Skills
-        </h2>
+            <div class="skill">
+                <div class="skill-icon">📊</div>
+                <h3>Excel</h3>
+                <small>Data Handling</small>
+                <br>
+                <span class="skill-status known">Known</span>
+            </div>
 
-        <p>
-            My current technical skills
-        </p>
+            <div class="skill">
+                <div class="skill-icon">📋</div>
+                <h3>Pivot Tables</h3>
+                <small>Data Analysis</small>
+                <br>
+                <span class="skill-status known">Known</span>
+            </div>
 
-        <div class="line"></div>
-
+            <div class="skill">
+                <div class="skill-icon">🗄️</div>
+                <h3>SQL</h3>
+                <small>Database</small>
+                <br>
+                <span class="skill-status learning">Learning</span>
+            </div>
+        </div>
     </div>
-
-
-    <div class="skills">
-
-        <div class="skill">
-
-            <div class="skill-icon">
-                🐍
-            </div>
-
-            <h3>
-                Python
-            </h3>
-
-            <small>
-                Programming
-            </small>
-
-            <br>
-
-            <span class="skill-status known">
-                Known
-            </span>
-
-        </div>
-
-
-        <div class="skill">
-
-            <div class="skill-icon">
-                📊
-            </div>
-
-            <h3>
-                Excel
-            </h3>
-
-            <small>
-                Data Handling
-            </small>
-
-            <br>
-
-            <span class="skill-status known">
-                Known
-            </span>
-
-        </div>
-
-
-        <div class="skill">
-
-            <div class="skill-icon">
-                📋
-            </div>
-
-            <h3>
-                Pivot Tables
-            </h3>
-
-            <small>
-                Data Analysis
-            </small>
-
-            <br>
-
-            <span class="skill-status known">
-                Known
-            </span>
-
-        </div>
-
-
-        <div class="skill">
-
-            <div class="skill-icon">
-                🗄️
-            </div>
-
-            <h3>
-                SQL
-            </h3>
-
-            <small>
-                Database
-            </small>
-
-            <br>
-
-            <span class="skill-status learning">
-                Learning
-            </span>
-
-        </div>
-
-    </div>
-
 </section>
 
-
-<!-- =====================================================
-     CURRENT FOCUS
-===================================================== -->
-
+<!-- CURRENT FOCUS -->
 <section id="focus" class="reveal">
+    <div class="section-shell">
+        <div class="section-title">
+            <h2>Current Focus</h2>
+            <p>What I am learning right now</p>
+            <div class="line"></div>
+        </div>
 
-    <div class="section-title">
+        <div class="focus-grid">
+            <div class="focus-card">
+                <h3>SQL</h3>
+                <p>I am learning SQL queries, filtering, grouping, joins, and database fundamentals.</p>
+            </div>
 
-        <h2>
-            Current Focus
-        </h2>
+            <div class="focus-card">
+                <h3>Python Practice</h3>
+                <p>I am strengthening my Python fundamentals through regular practice.</p>
+            </div>
 
-        <p>
-            What I am learning right now
-        </p>
+            <div class="focus-card">
+                <h3>Excel &amp; Data</h3>
+                <p>I am improving my practical Excel and data handling skills.</p>
+            </div>
 
-        <div class="line"></div>
-
+            <div class="focus-card">
+                <h3>Future Projects</h3>
+                <p>I am planning practical data analytics projects after strengthening the required skills.</p>
+            </div>
+        </div>
     </div>
-
-
-    <div class="focus-grid">
-
-        <div class="focus-card">
-
-            <h3>
-                SQL
-            </h3>
-
-            <p>
-                I am learning SQL queries, filtering, grouping,
-                joins, and database fundamentals.
-            </p>
-
-        </div>
-
-
-        <div class="focus-card">
-
-            <h3>
-                Python Practice
-            </h3>
-
-            <p>
-                I am strengthening my Python fundamentals through
-                regular practice.
-            </p>
-
-        </div>
-
-
-        <div class="focus-card">
-
-            <h3>
-                Excel & Data
-            </h3>
-
-            <p>
-                I am improving my practical Excel and data handling
-                skills.
-            </p>
-
-        </div>
-
-
-        <div class="focus-card">
-
-            <h3>
-                Future Projects
-            </h3>
-
-            <p>
-                I am planning practical data analytics projects
-                after strengthening the required skills.
-            </p>
-
-        </div>
-
-    </div>
-
 </section>
 
-
-<!-- =====================================================
-     RESUME
-===================================================== -->
-
+<!-- RESUME -->
 <section id="resume" class="reveal">
+    <div class="section-shell">
+        <div class="section-title">
+            <h2>Resume</h2>
+            <p>My professional profile</p>
+            <div class="line"></div>
+        </div>
 
-    <div class="section-title">
+        <div class="resume-box">
+            <div>
+                <h3>Download My Resume</h3>
+                <p>View or download my current resume in PDF format.</p>
+            </div>
 
-        <h2>
-            Resume
-        </h2>
-
-        <p>
-            My professional profile
-        </p>
-
-        <div class="line"></div>
-
+            <a class="btn" href="/static/resume.pdf" target="_blank" rel="noopener noreferrer">
+                Download Resume
+            </a>
+        </div>
     </div>
-
-
-    <div class="resume-box">
-
-        <h3>
-            Download My Resume
-        </h3>
-
-        <p>
-            View or download my current resume in PDF format.
-        </p>
-
-
-        <a
-            class="btn"
-            href="/static/resume.pdf"
-            target="_blank"
-            rel="noopener noreferrer">
-
-            Download Resume
-
-        </a>
-
-    </div>
-
 </section>
 
-
-<!-- =====================================================
-     CONTACT
-===================================================== -->
-
+<!-- CONTACT -->
 <section id="contact" class="reveal">
-
-    <div class="section-title">
-
-        <h2>
-            Contact
-        </h2>
-
-        <p>
-            Let's connect
-        </p>
-
-        <div class="line"></div>
-
-    </div>
-
-
-    <div class="contact-grid">
-
-        <!-- CONTACT INFO -->
-
-        <div class="contact-card">
-
-            <h3>
-                Get In Touch
-            </h3>
-
-
-            <div class="contact-item">
-
-                📧
-
-                <strong>
-                    Email:
-                </strong>
-
-                <span id="emailText">
-                    tripathiabhay3010@gmail.com
-                </span>
-
-            </div>
-
-
-            <div class="contact-item">
-
-                📍
-
-                <strong>
-                    Location:
-                </strong>
-
-                India
-
-            </div>
-
-
-            <div class="social-large-wrapper">
-
-                <a
-                    class="social-large"
-                    href="https://github.com/ashu8878"
-                    target="_blank"
-                    rel="noopener noreferrer">
-
-                    <div class="social-icon">
-                        💻
-                    </div>
-
-                    <strong>
-                        GitHub
-                    </strong>
-
-                    <small>
-                        View my repositories
-                    </small>
-
-                </a>
-
-
-                <a
-                    class="social-large"
-                    href="https://www.linkedin.com/in/ashutosh-tripathi-8850762bb/"
-                    target="_blank"
-                    rel="noopener noreferrer">
-
-                    <div class="social-icon">
-                        🔗
-                    </div>
-
-                    <strong>
-                        LinkedIn
-                    </strong>
-
-                    <small>
-                        Connect professionally
-                    </small>
-
-                </a>
-
-            </div>
-
+    <div class="section-shell">
+        <div class="section-title">
+            <h2>Contact</h2>
+            <p>Let's connect</p>
+            <div class="line"></div>
         </div>
 
+        <div class="contact-grid">
+            <div class="contact-card">
+                <h3>Get In Touch</h3>
 
-        <!-- CONTACT FORM -->
-
-        <div class="contact-card">
-
-            <h3>
-                Send a Message
-            </h3>
-
-
-            <form id="contactForm" method="POST" action="/contact">
-
-                <input
-                    type="hidden"
-                    id="csrfToken"
-                    name="csrf_token"
-                    value="{{ csrf_token() }}"
-                >
-
-                <div class="form-group">
-
-                    <label for="name">
-                        Your Name
-                    </label>
-
-                    <input
-                        id="name"
-                        name="name"
-                        type="text"
-                        placeholder="Enter your name"
-                        maxlength="100"
-                        required>
-
+                <div class="contact-item">
+                    📧
+                    <strong>Email:</strong>
+                    <span id="emailText">tripathiabhay3010@gmail.com</span>
                 </div>
 
-
-                <div class="form-group">
-
-                    <label for="senderEmail">
-                        Your Email
-                    </label>
-
-                    <input
-                        id="senderEmail"
-                        name="email"
-                        type="email"
-                        placeholder="Enter your email"
-                        maxlength="254"
-                        required>
-
+                <div class="contact-item">
+                    📍
+                    <strong>Location:</strong>
+                    India
                 </div>
 
+                <div class="social-large-wrapper">
+                    <a class="social-large" href="https://github.com/ashu8878" target="_blank" rel="noopener noreferrer">
+                        <div class="social-icon">💻</div>
+                        <strong>GitHub</strong>
+                        <small>View my repositories</small>
+                    </a>
 
-                <div class="form-group">
-
-                    <label for="message">
-                        Message
-                    </label>
-
-                    <textarea
-                        id="message"
-                        name="message"
-                        placeholder="Write your message..."
-                        maxlength="5000"
-                        required></textarea>
-
+                    <a class="social-large" href="https://www.linkedin.com/in/ashutosh-tripathi-8850762bb/" target="_blank" rel="noopener noreferrer">
+                        <div class="social-icon">🔗</div>
+                        <strong>LinkedIn</strong>
+                        <small>Connect professionally</small>
+                    </a>
                 </div>
+            </div>
 
+            <div class="contact-card">
+                <h3>Send a Message</h3>
 
-                <button
-                    class="btn"
-                    type="submit">
+                <form id="contactForm" method="POST" action="/contact">
+                    <input type="hidden" id="csrfToken" name="csrf_token" value="{{ csrf_token() }}">
 
-                    Send Message
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input id="name" name="name" type="text" placeholder="Enter your name" maxlength="100" required>
+                    </div>
 
-                </button>
+                    <div class="form-group">
+                        <label for="senderEmail">Your Email</label>
+                        <input id="senderEmail" name="email" type="email" placeholder="Enter your email" maxlength="254" required>
+                    </div>
 
-            </form>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" placeholder="Write your message..." maxlength="5000" required></textarea>
+                    </div>
 
+                    <button class="btn" type="submit">Send Message</button>
+                </form>
+            </div>
         </div>
-
     </div>
-
 </section>
-
-
-<!-- =====================================================
-     FOOTER
-===================================================== -->
 
 <footer>
-
-    ©
-    <span id="year"></span>
-
-    ASHUTOSH TRIPATHI
-
-    |
-    Built with HTML, CSS & JavaScript
-
+    © <span id="year"></span> ASHUTOSH TRIPATHI | Built with HTML, CSS &amp; JavaScript
 </footer>
 
-
-<!-- =====================================================
-     BACK TO TOP
-===================================================== -->
-
-<button
-    class="top"
-    id="topBtn"
-    type="button">
-
-    ↑
-
-</button>
-
+<button class="top" id="topBtn" type="button" aria-label="Back to top">↑</button>
 
 <script>
 
@@ -2237,7 +1086,6 @@ themeBtn.addEventListener("click",()=>{
 const words = [
 
     "a Python Learner",
-    "an Excel Enthusiast",
     "an MCA Student",
     "an Aspiring Data Analyst"
 
